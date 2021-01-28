@@ -15,7 +15,8 @@ LIBRARY := unit_test.a
 # Defines
 ####################################################################################################
 
-APPLICATION_DEFINES := 
+APPLICATION_DEFINES :=                                                 \
+  -DRANDOM_RANDOMIZATION_SEED_FILE_NAME='"./build/randomization_seed"'
 
 LIBRARY_DEFINES := 
 

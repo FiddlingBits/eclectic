@@ -7,8 +7,9 @@
  * Definitions
  ****************************************************************************************************/
 
-#define RANDOM_RANDOMIZATION_SEED_FILE_NAME     ("./build/randomization_seed")
-#define RANDOM_RANDOMIZATION_SEED_INITIAL_VALUE (0)
+#ifdef RANDOM_RANDOMIZATION_SEED_FILE_NAME
+  #define RANDOM_RANDOMIZATION_SEED_INITIAL_VALUE (0)
+#endif
 
 /****************************************************************************************************
  * Includes
@@ -24,9 +25,11 @@
  * Function Prototypes
  ****************************************************************************************************/
 
-static FILE *random_createRandomizationSeedFile(void);
-static uint32_t random_getIntegerUnsignedHelper(void);
-static uint32_t random_getRandomizationSeed(void);
+#ifdef RANDOM_RANDOMIZATION_SEED_FILE_NAME
+  static FILE *random_createRandomizationSeedFile(void);
+  static uint32_t random_getIntegerUnsignedHelper(void);
+  static uint32_t random_getRandomizationSeed(void);
+#endif
 
 /****************************************************************************************************
  * Function Definitions (Public)
@@ -155,6 +158,7 @@ uint32_t random_getIntegerUnsignedWithinRange(const uint32_t MinimumInteger, con
     return randomInteger;
 }
 
+#ifdef RANDOM_RANDOMIZATION_SEED_FILE_NAME
 /****************************************************************************************************
  * FUNCT:   random_init
  * BRIEF:   Initialize Random
@@ -175,6 +179,7 @@ void random_init(void)
         firstCall = false;
     }
 }
+#endif
 
 /****************************************************************************************************
  * FUNCT:   random_setBuffer
@@ -193,6 +198,7 @@ void random_setBuffer(uint8_t * const buffer, uint16_t BufferLength)
         buffer[i] = (uint8_t)random_getIntegerUnsigned();
 }
 
+#ifdef RANDOM_RANDOMIZATION_SEED_FILE_NAME
 /****************************************************************************************************
  * Function Definitions (Private)
  ****************************************************************************************************/
@@ -277,4 +283,5 @@ static uint32_t random_getRandomizationSeed(void)
 
     return randomizationSeed;
 }
+#endif
 

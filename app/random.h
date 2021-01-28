@@ -42,7 +42,9 @@ extern int32_t random_getIntegerSignedWithinRange(const int32_t MinimumInteger, 
 extern uint32_t random_getIntegerUnsigned(void);
 extern uint32_t random_getIntegerUnsignedUnique(const uint32_t * const Array, const uint32_t ArrayLength);
 extern uint32_t random_getIntegerUnsignedWithinRange(const uint32_t MinimumInteger, const uint32_t MaximumInteger);
-extern void random_init(void);
+#ifdef RANDOM_RANDOMIZATION_SEED_FILE_NAME
+  extern void random_init(void);
+#endif
 extern void random_setBuffer(uint8_t * const buffer, uint16_t BufferLength);
 
 #endif
