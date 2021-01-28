@@ -15,8 +15,7 @@ LIBRARY := unit_test.a
 # Defines
 ####################################################################################################
 
-APPLICATION_DEFINES :=                                                 \
-  -DRANDOM_RANDOMIZATION_SEED_FILE_NAME='"./build/randomization_seed"'
+APPLICATION_DEFINES := 
 
 LIBRARY_DEFINES := 
 
@@ -27,6 +26,9 @@ LIBRARY_DEFINES :=
 APPLICATION_INCLUDE_PATHS := \
   -I../app/                  \
   -I../lib/unity/
+
+APPLICATION_PREINCLUDE :=     \
+  -include ../config/config.h
 
 LIBRARY_INCLUDE_PATHS := \
   -I../lib/unity/
@@ -60,7 +62,7 @@ LIBRARY_SOURCES :=             \
 ####################################################################################################
 
 all: $(BUILD_DIRECTORY)/$(LIBRARY)
-	@clang -c $(APPLICATION_DEFINES) $(APPLICATION_COMPILER_FLAGS) $(APPLICATION_INCLUDE_PATHS) $(APPLICATION_SOURCES)
+	@clang -c $(APPLICATION_DEFINES) $(APPLICATION_COMPILER_FLAGS) $(APPLICATION_PREINCLUDE) $(APPLICATION_INCLUDE_PATHS) $(APPLICATION_SOURCES)
 	@clang *.o -o $(EXECUTABLE) $(BUILD_DIRECTORY)/$(LIBRARY)
 	@mv $(EXECUTABLE) $(BUILD_DIRECTORY)
 	@rm -f *.o
