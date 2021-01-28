@@ -24,6 +24,7 @@ LIBRARY_DEFINES :=
 ####################################################################################################
 
 APPLICATION_INCLUDE_PATHS := \
+  -I../app/                  \
   -I../lib/unity/
 
 LIBRARY_INCLUDE_PATHS := \
@@ -45,7 +46,8 @@ LIBRARY_COMPILER_FLAGS := \
 
 APPLICATION_SOURCES :=   \
   ./main.c               \
-  ./test/template_test.c
+  ./test/template_test.c \
+  ../app/random.c
 
 LIBRARY_SOURCES :=             \
   ../lib/unity/unity.c         \

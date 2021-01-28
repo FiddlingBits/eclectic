@@ -7,6 +7,7 @@
  * Includes
  ****************************************************************************************************/
 
+#include "random.h"
 #include "unity_fixture.h"
  
 /****************************************************************************************************
@@ -21,6 +22,8 @@ TEST_GROUP(template_test);
 
 TEST_SETUP(template_test)
 {
+    /*** Initialize System ***/
+    random_init();
 }
 
 TEST_TEAR_DOWN(template_test)
