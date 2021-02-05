@@ -47,9 +47,10 @@ LIBRARY_COMPILER_FLAGS := \
 # Sources
 ####################################################################################################
 
-APPLICATION_SOURCES :=   \
-  ./main.c               \
-  ./test/template_test.c \
+APPLICATION_SOURCES := \
+  ./main.c             \
+  ./test/crc_test.c    \
+  ../app/crc.c         \
   ../app/random.c
 
 LIBRARY_SOURCES :=             \

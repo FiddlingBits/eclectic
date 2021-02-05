@@ -53,5 +53,5 @@ int main(int argc, const char *argv[])
 static void main_runTestGroups(void)
 {
     /*** Run Test Groups ***/
-    RUN_TEST_GROUP(template_test)
+    RUN_TEST_GROUP(crc_test)
 }
