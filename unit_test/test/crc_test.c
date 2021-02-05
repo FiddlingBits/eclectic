@@ -8,7 +8,8 @@
  ****************************************************************************************************/
 
 /*** CRC-8 ***/
-#define CRC_TEST_CRC8_CHECK (0xF4)
+#define CRC_TEST_CRC8_CHECK          (0xF4)
+#define CRC_TEST_CRC8_CDMA2000_CHECK (0xDA)
 
 /****************************************************************************************************
  * Includes
@@ -90,15 +91,67 @@ TEST(crc_test, crc8CalculatePartialLoop)
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_CHECK, crc8);
 }
 
+TEST(crc_test, crc8Cdma2000CalculateLookupTable)
+{
+    uint8_t crc8Cdma2000;
+    
+    /*** Calculate CRC-8/CDMA2000; Verify Result As Expected ***/
+    crc8Cdma2000 = crc_crc8Cdma2000CalculateLookupTable(crcTest_CheckData, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_CDMA2000_CHECK, crc8Cdma2000);
+}
+
+TEST(crc_test, crc8Cdma2000CalculateLoop)
+{
+    uint8_t crc8Cdma2000;
+    
+    /*** Calculate CRC-8/CDMA2000; Verify Result As Expected ***/
+    crc8Cdma2000 = crc_crc8Cdma2000CalculateLoop(crcTest_CheckData, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_CDMA2000_CHECK, crc8Cdma2000);
+}
+
+TEST(crc_test, crc8Cdma2000CalculatePartialLookupTable)
+{
+    uint8_t crc8Cdma2000, i;
+    
+    /*** Set Up ***/
+    crc8Cdma2000 = CRC_CRC8_CDMA2000_INITIAL_CRC8_CDMA2000;
+    
+    /*** Calculate CRC-8/CDMA2000; Verify Result As Expected ***/
+    for(i = 0; i < sizeof(crcTest_CheckData); i++)
+        crc8Cdma2000 = crc_crc8Cdma2000CalculatePartialLookupTable(crcTest_CheckData[i], crc8Cdma2000);
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_CDMA2000_CHECK, crc8Cdma2000);
+}
+
+TEST(crc_test, crc8Cdma2000CalculatePartialLoop)
+{
+    uint8_t crc8Cdma2000, i;
+    
+    /*** Set Up ***/
+    crc8Cdma2000 = CRC_CRC8_CDMA2000_INITIAL_CRC8_CDMA2000;
+    
+    /*** Calculate CRC-8/CDMA2000; Verify Result As Expected ***/
+    for(i = 0; i < sizeof(crcTest_CheckData); i++)
+        crc8Cdma2000 = crc_crc8Cdma2000CalculatePartialLoop(crcTest_CheckData[i], crc8Cdma2000);
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_CDMA2000_CHECK, crc8Cdma2000);
+}
+
 /****************************************************************************************************
  * Test Group Runner
  ****************************************************************************************************/
 
 TEST_GROUP_RUNNER(crc_test)
 {
+    /*** CRC-8 ***/
+    /* CRC-8 */
     RUN_TEST_CASE(crc_test, crc8CalculateLookupTable);
     RUN_TEST_CASE(crc_test, crc8CalculateLoop);
     RUN_TEST_CASE(crc_test, crc8CalculatePartialLookupTable);
     RUN_TEST_CASE(crc_test, crc8CalculatePartialLoop);
+    
+    /* CRC-8/CDMA2000 */
+    RUN_TEST_CASE(crc_test, crc8Cdma2000CalculateLookupTable);
+    RUN_TEST_CASE(crc_test, crc8Cdma2000CalculateLoop);
+    RUN_TEST_CASE(crc_test, crc8Cdma2000CalculatePartialLookupTable);
+    RUN_TEST_CASE(crc_test, crc8Cdma2000CalculatePartialLoop);
 }
 
