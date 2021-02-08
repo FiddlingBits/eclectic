@@ -1,21 +1,23 @@
 ####################################################################################################
-# FILE:		Makefile
-# BRIEF:	Unit Test Makefile
+# FILE:	 crc_loop.mk
+# BRIEF: Unit Test Makefile
 ####################################################################################################
 
 ####################################################################################################
 # Targets
 ####################################################################################################
 
-BUILD_DIRECTORY := ./build
-EXECUTABLE := unit_test.exe
+BUILD_DIRECTORY := ../build
+EXECUTABLE := crc_loop.exe
 LIBRARY := unit_test.a
 
 ####################################################################################################
 # Defines
 ####################################################################################################
 
-APPLICATION_DEFINES := 
+APPLICATION_DEFINES :=            \
+  -DCRC_CRC8_LOOP_METHOD          \
+  -DCRC_CRC8_CDMA2000_LOOP_METHOD
 
 LIBRARY_DEFINES := 
 
@@ -24,14 +26,11 @@ LIBRARY_DEFINES :=
 ####################################################################################################
 
 APPLICATION_INCLUDE_PATHS := \
-  -I../app/                  \
-  -I../lib/unity/
-
-APPLICATION_PREINCLUDE :=     \
-  -include ../config/config.h
+  -I../../app/               \
+  -I../../lib/unity/
 
 LIBRARY_INCLUDE_PATHS := \
-  -I../lib/unity/
+  -I../../lib/unity/
 
 ####################################################################################################
 # Compiler Flags
@@ -48,22 +47,22 @@ LIBRARY_COMPILER_FLAGS := \
 ####################################################################################################
 
 APPLICATION_SOURCES := \
-  ./main.c             \
-  ./test/crc_test.c    \
-  ../app/crc.c         \
-  ../app/random.c
+  ../main.c            \
+  ../test/crc_test.c   \
+  ../../app/crc.c
 
-LIBRARY_SOURCES :=             \
-  ../lib/unity/unity.c         \
-  ../lib/unity/unity_fixture.c \
-  ../lib/unity/unity_memory.c
+LIBRARY_SOURCES :=                \
+  ../../lib/unity/unity.c         \
+  ../../lib/unity/unity_fixture.c \
+  ../../lib/unity/unity_memory.c
 
 ####################################################################################################
 # Rules
 ####################################################################################################
 
 all: $(BUILD_DIRECTORY)/$(LIBRARY)
-	@clang -c $(APPLICATION_DEFINES) $(APPLICATION_COMPILER_FLAGS) $(APPLICATION_PREINCLUDE) $(APPLICATION_INCLUDE_PATHS) $(APPLICATION_SOURCES)
+	@echo "Building Executable: $(EXECUTABLE)"
+	@clang -c $(APPLICATION_DEFINES) $(APPLICATION_COMPILER_FLAGS) $(APPLICATION_INCLUDE_PATHS) $(APPLICATION_SOURCES)
 	@clang *.o -o $(EXECUTABLE) $(BUILD_DIRECTORY)/$(LIBRARY)
 	@mv $(EXECUTABLE) $(BUILD_DIRECTORY)
 	@rm -f *.o
@@ -89,4 +88,3 @@ test: FORCE
 	@./$(BUILD_DIRECTORY)/$(EXECUTABLE) -r 10000 | grep -c '[^0] Failures' || true
 
 FORCE:
-
