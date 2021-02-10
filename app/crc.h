@@ -21,10 +21,16 @@
   #define CRC_CRC8_CDMA2000_INITIAL_CRC8_CDMA2000 (0xFF)
 #endif
 
+/* CRC-8/DARC */
+#if defined(CRC_CRC8_DARC_LOOKUP_TABLE_METHOD) || defined(CRC_CRC8_DARC_LOOP_METHOD)
+  #define CRC_CRC8_DARC_INITIAL_CRC8_DARC (0x00)
+#endif
+
 /****************************************************************************************************
  * Includes
  ****************************************************************************************************/
 
+#include <stdbool.h>
 #include <stdint.h>
 
 /****************************************************************************************************
@@ -42,6 +48,12 @@
 #if defined(CRC_CRC8_CDMA2000_LOOKUP_TABLE_METHOD) || defined(CRC_CRC8_CDMA2000_LOOP_METHOD)
   extern uint8_t crc_crc8Cdma2000Calculate(const uint8_t * const Data, const uint16_t DataLength);
   extern uint8_t crc_crc8Cdma2000CalculatePartial(const uint8_t Data, uint8_t crc8Cdma2000);
+#endif
+
+/* CRC-8/DARC */
+#if defined(CRC_CRC8_DARC_LOOKUP_TABLE_METHOD) || defined(CRC_CRC8_DARC_LOOP_METHOD)
+  extern uint8_t crc_crc8DarcCalculate(const uint8_t * const Data, const uint16_t DataLength);
+  extern uint8_t crc_crc8DarcCalculatePartial(const uint8_t Data, uint8_t crc8Darc, const bool Final);
 #endif
 
 #endif

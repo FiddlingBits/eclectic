@@ -10,12 +10,14 @@
 /*** CRC-8 ***/
 #define CRC_TEST_CRC8_CHECK          (0xF4)
 #define CRC_TEST_CRC8_CDMA2000_CHECK (0xDA)
+#define CRC_TEST_CRC8_DARC_CHECK     (0x15)
 
 /****************************************************************************************************
  * Includes
  ****************************************************************************************************/
 
 #include "crc.h"
+#include <stdbool.h>
 #include <stdint.h>
 #include "unity_fixture.h"
 
@@ -91,6 +93,29 @@ TEST(crc_test, crc8Cdma2000CalculatePartial)
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_CDMA2000_CHECK, crc8Cdma2000);
 }
 
+TEST(crc_test, crc8DarcCalculate)
+{
+    uint8_t crc8Darc;
+    
+    /*** Calculate CRC-8/DARC; Verify Result As Expected ***/
+    crc8Darc = crc_crc8DarcCalculate(crcTest_CheckData, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_DARC_CHECK, crc8Darc);
+}
+
+TEST(crc_test, crc8DarcCalculatePartial)
+{
+    uint8_t crc8Darc, i;
+    
+    /*** Set Up ***/
+    crc8Darc = CRC_CRC8_DARC_INITIAL_CRC8_DARC;
+    
+    /*** Calculate CRC-8/DARC; Verify Result As Expected ***/
+    for(i = 0; i < (sizeof(crcTest_CheckData) - 1); i++)
+        crc8Darc = crc_crc8DarcCalculatePartial(crcTest_CheckData[i], crc8Darc, false);
+    crc8Darc = crc_crc8DarcCalculatePartial(crcTest_CheckData[i], crc8Darc, true);
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_DARC_CHECK, crc8Darc);
+}
+
 /****************************************************************************************************
  * Test Group Runner
  ****************************************************************************************************/
@@ -105,5 +130,9 @@ TEST_GROUP_RUNNER(crc_test)
     /* CRC-8/CDMA2000 */
     RUN_TEST_CASE(crc_test, crc8Cdma2000Calculate);
     RUN_TEST_CASE(crc_test, crc8Cdma2000CalculatePartial);
+    
+    /* CRC-8/DARC */
+    RUN_TEST_CASE(crc_test, crc8DarcCalculate);
+    RUN_TEST_CASE(crc_test, crc8DarcCalculatePartial);
 }
 
