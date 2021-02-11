@@ -11,6 +11,7 @@
 #define CRC_TEST_CRC8_CHECK          (0xF4)
 #define CRC_TEST_CRC8_CDMA2000_CHECK (0xDA)
 #define CRC_TEST_CRC8_DARC_CHECK     (0x15)
+#define CRC_TEST_CRC8_DVB_S2_CHECK   (0xBC)
 
 /****************************************************************************************************
  * Includes
@@ -116,6 +117,28 @@ TEST(crc_test, crc8DarcCalculatePartial)
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_DARC_CHECK, crc8Darc);
 }
 
+TEST(crc_test, crc8DvbS2Calculate)
+{
+    uint8_t crc8DvbS2;
+    
+    /*** Calculate CRC-8/DVB-S2; Verify Result As Expected ***/
+    crc8DvbS2 = crc_crc8DvbS2Calculate(crcTest_CheckData, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_DVB_S2_CHECK, crc8DvbS2);
+}
+
+TEST(crc_test, crc8DvbS2CalculatePartial)
+{
+    uint8_t crc8DvbS2, i;
+    
+    /*** Set Up ***/
+    crc8DvbS2 = CRC_CRC8_DVB_S2_INITIAL_CRC8_DVB_S2;
+    
+    /*** Calculate CRC-8/DVB-S2; Verify Result As Expected ***/
+    for(i = 0; i < sizeof(crcTest_CheckData); i++)
+        crc8DvbS2 = crc_crc8DvbS2CalculatePartial(crcTest_CheckData[i], crc8DvbS2);
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_DVB_S2_CHECK, crc8DvbS2);
+}
+
 /****************************************************************************************************
  * Test Group Runner
  ****************************************************************************************************/
@@ -134,5 +157,9 @@ TEST_GROUP_RUNNER(crc_test)
     /* CRC-8/DARC */
     RUN_TEST_CASE(crc_test, crc8DarcCalculate);
     RUN_TEST_CASE(crc_test, crc8DarcCalculatePartial);
+    
+    /* CRC-8/DVB-S2 */
+    RUN_TEST_CASE(crc_test, crc8DvbS2Calculate);
+    RUN_TEST_CASE(crc_test, crc8DvbS2CalculatePartial);
 }
 
