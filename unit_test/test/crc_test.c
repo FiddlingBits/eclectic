@@ -13,6 +13,7 @@
 #define CRC_TEST_CRC8_DARC_CHECK     (0x15)
 #define CRC_TEST_CRC8_DVB_S2_CHECK   (0xBC)
 #define CRC_TEST_CRC8_EBU_CHECK      (0x97)
+#define CRC_TEST_CRC8_I_CODE_CHECK   (0x7E)
 
 /****************************************************************************************************
  * Includes
@@ -163,6 +164,28 @@ TEST(crc_test, crc8EbuCalculatePartial)
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_EBU_CHECK, crc8Ebu);
 }
 
+TEST(crc_test, crc8ICodeCalculate)
+{
+    uint8_t crc8ICode;
+    
+    /*** Calculate CRC-8/I-CODE; Verify Result As Expected ***/
+    crc8ICode = crc_crc8ICodeCalculate(crcTest_CheckData, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_I_CODE_CHECK, crc8ICode);
+}
+
+TEST(crc_test, crc8ICodeCalculatePartial)
+{
+    uint8_t crc8ICode, i;
+    
+    /*** Set Up ***/
+    crc8ICode = CRC_CRC8_I_CODE_INITIAL_CRC8_I_CODE;
+    
+    /*** Calculate CRC-8/I-CODE; Verify Result As Expected ***/
+    for(i = 0; i < sizeof(crcTest_CheckData); i++)
+        crc8ICode = crc_crc8ICodeCalculatePartial(crcTest_CheckData[i], crc8ICode);
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_I_CODE_CHECK, crc8ICode);
+}
+
 /****************************************************************************************************
  * Test Group Runner
  ****************************************************************************************************/
@@ -189,5 +212,9 @@ TEST_GROUP_RUNNER(crc_test)
     /* CRC-8/EBU */
     RUN_TEST_CASE(crc_test, crc8EbuCalculate);
     RUN_TEST_CASE(crc_test, crc8EbuCalculatePartial);
+    
+    /* CRC-8/I-CODE */
+    RUN_TEST_CASE(crc_test, crc8ICodeCalculate);
+    RUN_TEST_CASE(crc_test, crc8ICodeCalculatePartial);
 }
 
