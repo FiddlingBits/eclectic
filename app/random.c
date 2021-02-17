@@ -18,8 +18,25 @@
 #include "random.h"
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+#ifdef RANDOM_RANDOMIZATION_SEED_FILE_NAME
+  #include <stdio.h>
+  #include <stdlib.h>
+#endif
+
+/****************************************************************************************************
+ * Type Definitions
+ ****************************************************************************************************/
+
+#ifdef RANDOM_RANDOMIZATION_SEED_FILE_NAME
+  /*** Callbacks ***/
+  typedef uint32_t (*random_getIntegerUnsignedHelperCallback_t)(void);
+#endif
+
+/****************************************************************************************************
+ * Constants And Variables
+ ****************************************************************************************************/
+
+static random_getIntegerUnsignedHelperCallback_t random_getIntegerUnsignedHelperCallback;
 
 /****************************************************************************************************
  * Function Prototypes
@@ -43,7 +60,7 @@
  ****************************************************************************************************/
 uint32_t random_getBit(void)
 {
-    return (0x00000001 << (random_getIntegerUnsignedHelper() % 32));
+    return (0x00000001 << (random_getIntegerUnsignedHelperCallback() % 32));
 }
 
 /****************************************************************************************************
@@ -55,7 +72,7 @@ uint32_t random_getBit(void)
  ****************************************************************************************************/
 int32_t random_getIntegerSigned(void)
 {
-    return (int32_t)random_getIntegerUnsignedHelper();
+    return (int32_t)random_getIntegerUnsignedHelperCallback();
 }
 
 /****************************************************************************************************
@@ -87,7 +104,7 @@ int32_t random_getIntegerSignedWithinRange(const int32_t MinimumInteger, const i
 uint32_t random_getIntegerUnsigned(void)
 {
     /*** Get Random Unsigned Integer ***/
-    return random_getIntegerUnsignedHelper();
+    return random_getIntegerUnsignedHelperCallback();
 }
 
 /****************************************************************************************************
@@ -142,7 +159,7 @@ uint32_t random_getIntegerUnsignedWithinRange(const uint32_t MinimumInteger, con
     range = (uint64_t)(MaximumInteger - MinimumInteger + 1);
     if(range == 0x100000000)
     {
-        randomInteger = random_getIntegerUnsignedHelper(); // Full Range
+        randomInteger = random_getIntegerUnsignedHelperCallback(); // Full Range
     }
     else
     {
@@ -156,6 +173,23 @@ uint32_t random_getIntegerUnsignedWithinRange(const uint32_t MinimumInteger, con
     }
 
     return randomInteger;
+}
+
+/****************************************************************************************************
+ * FUNCT:   random_setBuffer
+ * BRIEF:   Set 8-Bit Unsigned Buffer To Random Integers
+ * RETURN:  void: Returns Nothing
+ * ARG:     buffer: Buffer To Set To Random Integers
+ * ARG:     BufferLength: Length Of Buffer
+ * NOTE:    Integer Range 0 To 255 (0x00 To 0xFF)
+ ****************************************************************************************************/
+void random_setBuffer(uint8_t * const buffer, uint16_t BufferLength)
+{
+    uint32_t i;
+
+    /*** Set Buffer To Random Integers ***/
+    for(i = 0; i < BufferLength; i++)
+        buffer[i] = (uint8_t)random_getIntegerUnsigned();
 }
 
 #ifdef RANDOM_RANDOMIZATION_SEED_FILE_NAME
@@ -174,29 +208,25 @@ void random_init(void)
     if(firstCall)
     {
         /*** Initialize Randomization ***/
+        random_getIntegerUnsignedHelperCallback = random_getIntegerUnsignedHelper;
         randomizationSeed = random_getRandomizationSeed();
         srand(randomizationSeed);
         firstCall = false;
     }
 }
-#endif
-
+#else
 /****************************************************************************************************
- * FUNCT:   random_setBuffer
- * BRIEF:   Set 8-Bit Unsigned Buffer To Random Integers
+ * FUNCT:   random_init
+ * BRIEF:   Initialize Random
  * RETURN:  void: Returns Nothing
- * ARG:     buffer: Buffer To Set To Random Integers
- * ARG:     BufferLength: Length Of Buffer
- * NOTE:    Integer Range 0 To 255 (0x00 To 0xFF)
+ * ARG:     GetIntegerUnsignedHelperCallback: Get Integer Unsigned Helper Callback
  ****************************************************************************************************/
-void random_setBuffer(uint8_t * const buffer, uint16_t BufferLength)
+void random_init(const random_getIntegerUnsignedHelperCallback_t GetIntegerUnsignedHelperCallback)
 {
-    uint32_t i;
-
-    /*** Set Buffer To Random Integers ***/
-    for(i = 0; i < BufferLength; i++)
-        buffer[i] = (uint8_t)random_getIntegerUnsigned();
+    /*** Initialize Randomization ***/
+    random_getIntegerUnsignedHelperCallback = GetIntegerUnsignedHelperCallback;
 }
+#endif
 
 #ifdef RANDOM_RANDOMIZATION_SEED_FILE_NAME
 /****************************************************************************************************
@@ -284,4 +314,3 @@ static uint32_t random_getRandomizationSeed(void)
     return randomizationSeed;
 }
 #endif
-
