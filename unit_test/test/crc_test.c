@@ -14,6 +14,7 @@
 #define CRC_TEST_CRC8_DVB_S2_CHECK   (0xBC)
 #define CRC_TEST_CRC8_EBU_CHECK      (0x97)
 #define CRC_TEST_CRC8_I_CODE_CHECK   (0x7E)
+#define CRC_TEST_CRC8_ITU_CHECK      (0xA1)
 
 /****************************************************************************************************
  * Includes
@@ -186,6 +187,29 @@ TEST(crc_test, crc8ICodeCalculatePartial)
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_I_CODE_CHECK, crc8ICode);
 }
 
+TEST(crc_test, crc8ItuCalculate)
+{
+    uint8_t crc8Itu;
+    
+    /*** Calculate CRC-8/ITU; Verify Result As Expected ***/
+    crc8Itu = crc_crc8ItuCalculate(crcTest_CheckData, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_ITU_CHECK, crc8Itu);
+}
+
+TEST(crc_test, crc8ItuCalculatePartial)
+{
+    uint8_t crc8Itu, i;
+    
+    /*** Set Up ***/
+    crc8Itu = CRC_CRC8_ITU_INITIAL_CRC8_ITU;
+    
+    /*** Calculate CRC-8/ITU; Verify Result As Expected ***/
+    for(i = 0; i < (sizeof(crcTest_CheckData) - 1); i++)
+        crc8Itu = crc_crc8ItuCalculatePartial(crcTest_CheckData[i], crc8Itu, false);
+    crc8Itu = crc_crc8ItuCalculatePartial(crcTest_CheckData[i], crc8Itu, true);
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_ITU_CHECK, crc8Itu);
+}
+
 /****************************************************************************************************
  * Test Group Runner
  ****************************************************************************************************/
@@ -216,5 +240,9 @@ TEST_GROUP_RUNNER(crc_test)
     /* CRC-8/I-CODE */
     RUN_TEST_CASE(crc_test, crc8ICodeCalculate);
     RUN_TEST_CASE(crc_test, crc8ICodeCalculatePartial);
+    
+    /* CRC-8/ITU */
+    RUN_TEST_CASE(crc_test, crc8ItuCalculate);
+    RUN_TEST_CASE(crc_test, crc8ItuCalculatePartial);
 }
 
