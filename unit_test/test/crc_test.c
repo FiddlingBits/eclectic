@@ -15,6 +15,7 @@
 #define CRC_TEST_CRC8_EBU_CHECK      (0x97)
 #define CRC_TEST_CRC8_I_CODE_CHECK   (0x7E)
 #define CRC_TEST_CRC8_ITU_CHECK      (0xA1)
+#define CRC_TEST_CRC8_MAXIM_CHECK    (0xA1)
 
 /****************************************************************************************************
  * Includes
@@ -210,6 +211,29 @@ TEST(crc_test, crc8ItuCalculatePartial)
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_ITU_CHECK, crc8Itu);
 }
 
+TEST(crc_test, crc8MaximCalculate)
+{
+    uint8_t crc8Maxim;
+    
+    /*** Calculate CRC-8/MAXIM; Verify Result As Expected ***/
+    crc8Maxim = crc_crc8MaximCalculate(crcTest_CheckData, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_MAXIM_CHECK, crc8Maxim);
+}
+
+TEST(crc_test, crc8MaximCalculatePartial)
+{
+    uint8_t crc8Maxim, i;
+    
+    /*** Set Up ***/
+    crc8Maxim = CRC_CRC8_MAXIM_INITIAL_CRC8_MAXIM;
+    
+    /*** Calculate CRC-8/MAXIM; Verify Result As Expected ***/
+    for(i = 0; i < (sizeof(crcTest_CheckData) - 1); i++)
+        crc8Maxim = crc_crc8MaximCalculatePartial(crcTest_CheckData[i], crc8Maxim, false);
+    crc8Maxim = crc_crc8MaximCalculatePartial(crcTest_CheckData[i], crc8Maxim, true);
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_MAXIM_CHECK, crc8Maxim);
+}
+
 /****************************************************************************************************
  * Test Group Runner
  ****************************************************************************************************/
@@ -244,5 +268,9 @@ TEST_GROUP_RUNNER(crc_test)
     /* CRC-8/ITU */
     RUN_TEST_CASE(crc_test, crc8ItuCalculate);
     RUN_TEST_CASE(crc_test, crc8ItuCalculatePartial);
+    
+    /* CRC-8/MAXIM */
+    RUN_TEST_CASE(crc_test, crc8MaximCalculate);
+    RUN_TEST_CASE(crc_test, crc8MaximCalculatePartial);
 }
 

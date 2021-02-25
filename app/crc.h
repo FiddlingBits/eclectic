@@ -46,6 +46,11 @@
   #define CRC_CRC8_ITU_INITIAL_CRC8_ITU (0x00)
 #endif
 
+/* CRC-8/MAXIM */
+#if defined(CRC_CRC8_MAXIM_LOOKUP_TABLE_METHOD) || defined(CRC_CRC8_MAXIM_LOOP_METHOD)
+  #define CRC_CRC8_MAXIM_INITIAL_CRC8_MAXIM (0x00)
+#endif
+
 /****************************************************************************************************
  * Includes
  ****************************************************************************************************/
@@ -98,6 +103,12 @@
 #if defined(CRC_CRC8_ITU_LOOKUP_TABLE_METHOD) || defined(CRC_CRC8_ITU_LOOP_METHOD)
   extern uint8_t crc_crc8ItuCalculate(const uint8_t * const Data, const uint16_t DataLength);
   extern uint8_t crc_crc8ItuCalculatePartial(const uint8_t Data, uint8_t crc8Itu, const bool Final);
+#endif
+
+/* CRC-8/MAXIM */
+#if defined(CRC_CRC8_MAXIM_LOOKUP_TABLE_METHOD) || defined(CRC_CRC8_MAXIM_LOOP_METHOD)
+  extern uint8_t crc_crc8MaximCalculate(const uint8_t * const Data, const uint16_t DataLength);
+  extern uint8_t crc_crc8MaximCalculatePartial(const uint8_t Data, uint8_t crc8Maxim, const bool Final);
 #endif
 
 #endif
