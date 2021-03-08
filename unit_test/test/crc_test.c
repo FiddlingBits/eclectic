@@ -23,6 +23,7 @@
 
 #include "crc.h"
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #include "unity_fixture.h"
 
@@ -58,7 +59,16 @@ TEST(crc_test, crc8Calculate)
 {
     uint8_t crc8;
     
-    /*** Calculate CRC-8; Verify Result As Expected ***/
+    /*** Error Check ***/
+    /* NULL Pointer */
+    crc8 = crc_crc8Calculate(NULL, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_INITIAL_CRC8, crc8);
+    
+    /* Zero Length Data */
+    crc8 = crc_crc8Calculate(crcTest_CheckData, 0);
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_INITIAL_CRC8, crc8);
+    
+    /*** Calculate CRC-8 For Check Data; Verify Result As Expected ***/
     crc8 = crc_crc8Calculate(crcTest_CheckData, sizeof(crcTest_CheckData));
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_CHECK, crc8);
 }
@@ -70,7 +80,7 @@ TEST(crc_test, crc8CalculatePartial)
     /*** Set Up ***/
     crc8 = CRC_CRC8_INITIAL_CRC8;
     
-    /*** Calculate CRC-8; Verify Result As Expected ***/
+    /*** Calculate CRC-8 For Check Data; Verify Result As Expected ***/
     for(i = 0; i < sizeof(crcTest_CheckData); i++)
         crc8 = crc_crc8CalculatePartial(crcTest_CheckData[i], crc8);
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_CHECK, crc8);
@@ -80,7 +90,16 @@ TEST(crc_test, crc8Cdma2000Calculate)
 {
     uint8_t crc8Cdma2000;
     
-    /*** Calculate CRC-8/CDMA2000; Verify Result As Expected ***/
+    /*** Error Check ***/
+    /* NULL Pointer */
+    crc8Cdma2000 = crc_crc8Cdma2000Calculate(NULL, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_CDMA2000_INITIAL_CRC8_CDMA2000, crc8Cdma2000);
+    
+    /* Zero Length Data */
+    crc8Cdma2000 = crc_crc8Cdma2000Calculate(crcTest_CheckData, 0);
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_CDMA2000_INITIAL_CRC8_CDMA2000, crc8Cdma2000);
+    
+    /*** Calculate CRC-8/CDMA2000 For Check Data; Verify Result As Expected ***/
     crc8Cdma2000 = crc_crc8Cdma2000Calculate(crcTest_CheckData, sizeof(crcTest_CheckData));
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_CDMA2000_CHECK, crc8Cdma2000);
 }
@@ -92,7 +111,7 @@ TEST(crc_test, crc8Cdma2000CalculatePartial)
     /*** Set Up ***/
     crc8Cdma2000 = CRC_CRC8_CDMA2000_INITIAL_CRC8_CDMA2000;
     
-    /*** Calculate CRC-8/CDMA2000; Verify Result As Expected ***/
+    /*** Calculate CRC-8/CDMA2000 For Check Data; Verify Result As Expected ***/
     for(i = 0; i < sizeof(crcTest_CheckData); i++)
         crc8Cdma2000 = crc_crc8Cdma2000CalculatePartial(crcTest_CheckData[i], crc8Cdma2000);
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_CDMA2000_CHECK, crc8Cdma2000);
@@ -102,7 +121,16 @@ TEST(crc_test, crc8DarcCalculate)
 {
     uint8_t crc8Darc;
     
-    /*** Calculate CRC-8/DARC; Verify Result As Expected ***/
+    /*** Error Check ***/
+    /* NULL Pointer */
+    crc8Darc = crc_crc8DarcCalculate(NULL, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_DARC_INITIAL_CRC8_DARC, crc8Darc);
+    
+    /* Zero Length Data */
+    crc8Darc = crc_crc8DarcCalculate(crcTest_CheckData, 0);
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_DARC_INITIAL_CRC8_DARC, crc8Darc);
+    
+    /*** Calculate CRC-8/DARC For Check Data; Verify Result As Expected ***/
     crc8Darc = crc_crc8DarcCalculate(crcTest_CheckData, sizeof(crcTest_CheckData));
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_DARC_CHECK, crc8Darc);
 }
@@ -114,7 +142,7 @@ TEST(crc_test, crc8DarcCalculatePartial)
     /*** Set Up ***/
     crc8Darc = CRC_CRC8_DARC_INITIAL_CRC8_DARC;
     
-    /*** Calculate CRC-8/DARC; Verify Result As Expected ***/
+    /*** Calculate CRC-8/DARC For Check Data; Verify Result As Expected ***/
     for(i = 0; i < (sizeof(crcTest_CheckData) - 1); i++)
         crc8Darc = crc_crc8DarcCalculatePartial(crcTest_CheckData[i], crc8Darc, false);
     crc8Darc = crc_crc8DarcCalculatePartial(crcTest_CheckData[i], crc8Darc, true);
@@ -124,8 +152,17 @@ TEST(crc_test, crc8DarcCalculatePartial)
 TEST(crc_test, crc8DvbS2Calculate)
 {
     uint8_t crc8DvbS2;
+
+    /*** Error Check ***/
+    /* NULL Pointer */
+    crc8DvbS2 = crc_crc8DvbS2Calculate(NULL, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_DVB_S2_INITIAL_CRC8_DVB_S2, crc8DvbS2);
     
-    /*** Calculate CRC-8/DVB-S2; Verify Result As Expected ***/
+    /* Zero Length Data */
+    crc8DvbS2 = crc_crc8DvbS2Calculate(crcTest_CheckData, 0);
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_DVB_S2_INITIAL_CRC8_DVB_S2, crc8DvbS2);
+    
+    /*** Calculate CRC-8/DVB-S2 For Check Data; Verify Result As Expected ***/
     crc8DvbS2 = crc_crc8DvbS2Calculate(crcTest_CheckData, sizeof(crcTest_CheckData));
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_DVB_S2_CHECK, crc8DvbS2);
 }
@@ -137,7 +174,7 @@ TEST(crc_test, crc8DvbS2CalculatePartial)
     /*** Set Up ***/
     crc8DvbS2 = CRC_CRC8_DVB_S2_INITIAL_CRC8_DVB_S2;
     
-    /*** Calculate CRC-8/DVB-S2; Verify Result As Expected ***/
+    /*** Calculate CRC-8/DVB-S2 For Check Data; Verify Result As Expected ***/
     for(i = 0; i < sizeof(crcTest_CheckData); i++)
         crc8DvbS2 = crc_crc8DvbS2CalculatePartial(crcTest_CheckData[i], crc8DvbS2);
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_DVB_S2_CHECK, crc8DvbS2);
@@ -147,7 +184,16 @@ TEST(crc_test, crc8EbuCalculate)
 {
     uint8_t crc8Ebu;
     
-    /*** Calculate CRC-8/EBU; Verify Result As Expected ***/
+    /*** Error Check ***/
+    /* NULL Pointer */
+    crc8Ebu = crc_crc8EbuCalculate(NULL, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_EBU_INITIAL_CRC8_EBU, crc8Ebu);
+    
+    /* Zero Length Data */
+    crc8Ebu = crc_crc8EbuCalculate(crcTest_CheckData, 0);
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_EBU_INITIAL_CRC8_EBU, crc8Ebu);
+    
+    /*** Calculate CRC-8/EBU For Check Data; Verify Result As Expected ***/
     crc8Ebu = crc_crc8EbuCalculate(crcTest_CheckData, sizeof(crcTest_CheckData));
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_EBU_CHECK, crc8Ebu);
 }
@@ -159,7 +205,7 @@ TEST(crc_test, crc8EbuCalculatePartial)
     /*** Set Up ***/
     crc8Ebu = CRC_CRC8_EBU_INITIAL_CRC8_EBU;
     
-    /*** Calculate CRC-8/EBU; Verify Result As Expected ***/
+    /*** Calculate CRC-8/EBU For Check Data; Verify Result As Expected ***/
     for(i = 0; i < (sizeof(crcTest_CheckData) - 1); i++)
         crc8Ebu = crc_crc8EbuCalculatePartial(crcTest_CheckData[i], crc8Ebu, false);
     crc8Ebu = crc_crc8EbuCalculatePartial(crcTest_CheckData[i], crc8Ebu, true);
@@ -170,7 +216,16 @@ TEST(crc_test, crc8ICodeCalculate)
 {
     uint8_t crc8ICode;
     
-    /*** Calculate CRC-8/I-CODE; Verify Result As Expected ***/
+    /*** Error Check ***/
+    /* NULL Pointer */
+    crc8ICode = crc_crc8ICodeCalculate(NULL, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_I_CODE_INITIAL_CRC8_I_CODE, crc8ICode);
+    
+    /* Zero Length Data */
+    crc8ICode = crc_crc8ICodeCalculate(crcTest_CheckData, 0);
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_I_CODE_INITIAL_CRC8_I_CODE, crc8ICode);
+    
+    /*** Calculate CRC-8/I-CODE For Check Data; Verify Result As Expected ***/
     crc8ICode = crc_crc8ICodeCalculate(crcTest_CheckData, sizeof(crcTest_CheckData));
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_I_CODE_CHECK, crc8ICode);
 }
@@ -182,7 +237,7 @@ TEST(crc_test, crc8ICodeCalculatePartial)
     /*** Set Up ***/
     crc8ICode = CRC_CRC8_I_CODE_INITIAL_CRC8_I_CODE;
     
-    /*** Calculate CRC-8/I-CODE; Verify Result As Expected ***/
+    /*** Calculate CRC-8/I-CODE For Check Data; Verify Result As Expected ***/
     for(i = 0; i < sizeof(crcTest_CheckData); i++)
         crc8ICode = crc_crc8ICodeCalculatePartial(crcTest_CheckData[i], crc8ICode);
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_I_CODE_CHECK, crc8ICode);
@@ -192,7 +247,16 @@ TEST(crc_test, crc8ItuCalculate)
 {
     uint8_t crc8Itu;
     
-    /*** Calculate CRC-8/ITU; Verify Result As Expected ***/
+    /*** Error Check ***/
+    /* NULL Pointer */
+    crc8Itu = crc_crc8ItuCalculate(NULL, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_ITU_INITIAL_CRC8_ITU, crc8Itu);
+    
+    /* Zero Length Data */
+    crc8Itu = crc_crc8ItuCalculate(crcTest_CheckData, 0);
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_ITU_INITIAL_CRC8_ITU, crc8Itu);
+    
+    /*** Calculate CRC-8/ITU For Check Data; Verify Result As Expected ***/
     crc8Itu = crc_crc8ItuCalculate(crcTest_CheckData, sizeof(crcTest_CheckData));
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_ITU_CHECK, crc8Itu);
 }
@@ -204,7 +268,7 @@ TEST(crc_test, crc8ItuCalculatePartial)
     /*** Set Up ***/
     crc8Itu = CRC_CRC8_ITU_INITIAL_CRC8_ITU;
     
-    /*** Calculate CRC-8/ITU; Verify Result As Expected ***/
+    /*** Calculate CRC-8/ITU For Check Data; Verify Result As Expected ***/
     for(i = 0; i < (sizeof(crcTest_CheckData) - 1); i++)
         crc8Itu = crc_crc8ItuCalculatePartial(crcTest_CheckData[i], crc8Itu, false);
     crc8Itu = crc_crc8ItuCalculatePartial(crcTest_CheckData[i], crc8Itu, true);
@@ -215,7 +279,16 @@ TEST(crc_test, crc8MaximCalculate)
 {
     uint8_t crc8Maxim;
     
-    /*** Calculate CRC-8/MAXIM; Verify Result As Expected ***/
+    /*** Error Check ***/
+    /* NULL Pointer */
+    crc8Maxim = crc_crc8MaximCalculate(NULL, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_MAXIM_INITIAL_CRC8_MAXIM, crc8Maxim);
+    
+    /* Zero Length Data */
+    crc8Maxim = crc_crc8MaximCalculate(crcTest_CheckData, 0);
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_MAXIM_INITIAL_CRC8_MAXIM, crc8Maxim);
+    
+    /*** Calculate CRC-8/MAXIM For Check Data; Verify Result As Expected ***/
     crc8Maxim = crc_crc8MaximCalculate(crcTest_CheckData, sizeof(crcTest_CheckData));
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_MAXIM_CHECK, crc8Maxim);
 }
@@ -227,7 +300,7 @@ TEST(crc_test, crc8MaximCalculatePartial)
     /*** Set Up ***/
     crc8Maxim = CRC_CRC8_MAXIM_INITIAL_CRC8_MAXIM;
     
-    /*** Calculate CRC-8/MAXIM; Verify Result As Expected ***/
+    /*** Calculate CRC-8/MAXIM For Check Data; Verify Result As Expected ***/
     for(i = 0; i < (sizeof(crcTest_CheckData) - 1); i++)
         crc8Maxim = crc_crc8MaximCalculatePartial(crcTest_CheckData[i], crc8Maxim, false);
     crc8Maxim = crc_crc8MaximCalculatePartial(crcTest_CheckData[i], crc8Maxim, true);

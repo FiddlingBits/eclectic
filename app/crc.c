@@ -285,7 +285,7 @@ uint8_t crc_crc8Calculate(const uint8_t * const Data, const uint16_t DataLength)
     uint32_t i;
 
     /*** Error Check ***/
-    if(Data == NULL)
+    if((Data == NULL) || (DataLength == 0))
         return CRC_CRC8_INITIAL_CRC8;
 
     /*** Calculate Full CRC-8 ***/
@@ -344,7 +344,7 @@ uint8_t crc_crc8Cdma2000Calculate(const uint8_t * const Data, const uint16_t Dat
     uint32_t i;
 
     /*** Error Check ***/
-    if(Data == NULL)
+    if((Data == NULL) || (DataLength == 0))
         return CRC_CRC8_CDMA2000_INITIAL_CRC8_CDMA2000;
 
     /*** Calculate Full CRC-8/CDMA2000 ***/
@@ -404,7 +404,7 @@ uint8_t crc_crc8DarcCalculate(const uint8_t * const Data, const uint16_t DataLen
     uint32_t i;
 
     /*** Error Check ***/
-    if(Data == NULL)
+    if((Data == NULL) || (DataLength == 0))
         return CRC_CRC8_DARC_INITIAL_CRC8_DARC;
 
     /*** Calculate CRC-8/DARC ***/
@@ -473,7 +473,7 @@ uint8_t crc_crc8DvbS2Calculate(const uint8_t * const Data, const uint16_t DataLe
     uint32_t i;
 
     /*** Error Check ***/
-    if(Data == NULL)
+    if((Data == NULL) || (DataLength == 0))
         return CRC_CRC8_DVB_S2_INITIAL_CRC8_DVB_S2;
 
     /*** Calculate Full CRC-8/DVB-S2 ***/
@@ -533,7 +533,7 @@ uint8_t crc_crc8EbuCalculate(const uint8_t * const Data, const uint16_t DataLeng
     uint32_t i;
 
     /*** Error Check ***/
-    if(Data == NULL)
+    if((Data == NULL) || (DataLength == 0))
         return CRC_CRC8_EBU_INITIAL_CRC8_EBU;
 
     /*** Calculate CRC-8/EBU ***/
@@ -602,7 +602,7 @@ uint8_t crc_crc8ICodeCalculate(const uint8_t * const Data, const uint16_t DataLe
     uint32_t i;
 
     /*** Error Check ***/
-    if(Data == NULL)
+    if((Data == NULL) || (DataLength == 0))
         return CRC_CRC8_I_CODE_INITIAL_CRC8_I_CODE;
 
     /*** Calculate Full CRC-8/I-CODE ***/
@@ -662,7 +662,7 @@ uint8_t crc_crc8ItuCalculate(const uint8_t * const Data, const uint16_t DataLeng
     uint32_t i;
 
     /*** Error Check ***/
-    if(Data == NULL)
+    if((Data == NULL) || (DataLength == 0))
         return CRC_CRC8_ITU_INITIAL_CRC8_ITU;
 
     /*** Calculate Full CRC-8/ITU ***/
@@ -732,7 +732,7 @@ uint8_t crc_crc8MaximCalculate(const uint8_t * const Data, const uint16_t DataLe
     uint32_t i;
 
     /*** Error Check ***/
-    if(Data == NULL)
+    if((Data == NULL) || (DataLength == 0))
         return CRC_CRC8_MAXIM_INITIAL_CRC8_MAXIM;
 
     /*** Calculate CRC-8/MAXIM ***/
