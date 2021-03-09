@@ -16,6 +16,7 @@
 #define CRC_TEST_CRC8_I_CODE_CHECK   (0x7E)
 #define CRC_TEST_CRC8_ITU_CHECK      (0xA1)
 #define CRC_TEST_CRC8_MAXIM_CHECK    (0xA1)
+#define CRC_TEST_CRC8_ROHC_CHECK     (0xD0)
 
 /****************************************************************************************************
  * Includes
@@ -307,6 +308,38 @@ TEST(crc_test, crc8MaximCalculatePartial)
     TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_MAXIM_CHECK, crc8Maxim);
 }
 
+TEST(crc_test, crc8RohcCalculate)
+{
+    uint8_t crc8Rohc;
+    
+    /*** Error Check ***/
+    /* NULL Pointer */
+    crc8Rohc = crc_crc8RohcCalculate(NULL, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_ROHC_INITIAL_CRC8_ROHC, crc8Rohc);
+    
+    /* Zero Length Data */
+    crc8Rohc = crc_crc8RohcCalculate(crcTest_CheckData, 0);
+    TEST_ASSERT_EQUAL_HEX8(CRC_CRC8_ROHC_INITIAL_CRC8_ROHC, crc8Rohc);
+    
+    /*** Calculate CRC-8/ROHC For Check Data; Verify Result As Expected ***/
+    crc8Rohc = crc_crc8RohcCalculate(crcTest_CheckData, sizeof(crcTest_CheckData));
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_ROHC_CHECK, crc8Rohc);
+}
+
+TEST(crc_test, crc8RohcCalculatePartial)
+{
+    uint8_t crc8Rohc, i;
+    
+    /*** Set Up ***/
+    crc8Rohc = CRC_CRC8_ROHC_INITIAL_CRC8_ROHC;
+    
+    /*** Calculate CRC-8/ROHC For Check Data; Verify Result As Expected ***/
+    for(i = 0; i < (sizeof(crcTest_CheckData) - 1); i++)
+        crc8Rohc = crc_crc8RohcCalculatePartial(crcTest_CheckData[i], crc8Rohc, false);
+    crc8Rohc = crc_crc8RohcCalculatePartial(crcTest_CheckData[i], crc8Rohc, true);
+    TEST_ASSERT_EQUAL_HEX8(CRC_TEST_CRC8_ROHC_CHECK, crc8Rohc);
+}
+
 /****************************************************************************************************
  * Test Group Runner
  ****************************************************************************************************/
@@ -345,5 +378,9 @@ TEST_GROUP_RUNNER(crc_test)
     /* CRC-8/MAXIM */
     RUN_TEST_CASE(crc_test, crc8MaximCalculate);
     RUN_TEST_CASE(crc_test, crc8MaximCalculatePartial);
+    
+    /* CRC-8/ROHC */
+    RUN_TEST_CASE(crc_test, crc8RohcCalculate);
+    RUN_TEST_CASE(crc_test, crc8RohcCalculatePartial);
 }
 

@@ -51,6 +51,11 @@
   #define CRC_CRC8_MAXIM_INITIAL_CRC8_MAXIM (0x00)
 #endif
 
+/* CRC-8/ROHC */
+#if defined(CRC_CRC8_ROHC_LOOKUP_TABLE_METHOD) || defined(CRC_CRC8_ROHC_LOOP_METHOD)
+  #define CRC_CRC8_ROHC_INITIAL_CRC8_ROHC (0xFF)
+#endif
+
 /****************************************************************************************************
  * Includes
  ****************************************************************************************************/
@@ -109,6 +114,12 @@
 #if defined(CRC_CRC8_MAXIM_LOOKUP_TABLE_METHOD) || defined(CRC_CRC8_MAXIM_LOOP_METHOD)
   extern uint8_t crc_crc8MaximCalculate(const uint8_t * const Data, const uint16_t DataLength);
   extern uint8_t crc_crc8MaximCalculatePartial(const uint8_t Data, uint8_t crc8Maxim, const bool Final);
+#endif
+
+/* CRC-8/ROHC */
+#if defined(CRC_CRC8_ROHC_LOOKUP_TABLE_METHOD) || defined(CRC_CRC8_ROHC_LOOP_METHOD)
+  extern uint8_t crc_crc8RohcCalculate(const uint8_t * const Data, const uint16_t DataLength);
+  extern uint8_t crc_crc8RohcCalculatePartial(const uint8_t Data, uint8_t crc8Rohc, const bool Final);
 #endif
 
 #endif
