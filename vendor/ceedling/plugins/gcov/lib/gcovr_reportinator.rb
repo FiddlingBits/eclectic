@@ -114,9 +114,9 @@ class GcovrReportinator
     args += "--gcov-filter \"#{gcovr_opts[:gcov_filter]}\" " unless gcovr_opts[:gcov_filter].nil?
     args += "--gcov-exclude \"#{gcovr_opts[:gcov_exclude]}\" " unless gcovr_opts[:gcov_exclude].nil?
     args += "--exclude-directories \"#{gcovr_opts[:exclude_directories]}\" " unless gcovr_opts[:exclude_directories].nil?
-    args += "--branches " if gcovr_opts[:branches].nil? || gcovr_opts[:branches] # Defaults to enabled.
+    args += "--sort-branches " if gcovr_opts[:branches].nil? || gcovr_opts[:branches] # Defaults to enabled.
     args += "--sort-uncovered " if gcovr_opts[:sort_uncovered]
-    args += "--sort-percentage " if gcovr_opts[:sort_percentage].nil? || gcovr_opts[:sort_percentage] # Defaults to enabled.
+    args += "--sort uncovered-percent " if gcovr_opts[:sort_percentage].nil? || gcovr_opts[:sort_percentage] # Defaults to enabled.
     args += "--print-summary " if gcovr_opts[:print_summary]
     args += "--gcov-executable \"#{gcovr_opts[:gcov_executable]}\" " unless gcovr_opts[:gcov_executable].nil?
     args += "--exclude-unreachable-branches " if gcovr_opts[:exclude_unreachable_branches]

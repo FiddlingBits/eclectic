@@ -1,3 +1,2 @@
 #!/bin/bash
-
-ruby vendor/ceedling/bin/ceedling $*
+ruby vendor/ceedling/bin/ceedling clean clobber gcov:all utils:gcov

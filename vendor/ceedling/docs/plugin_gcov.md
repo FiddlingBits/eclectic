@@ -286,7 +286,7 @@ default behaviors of gcovr:
     # Defaults to the system default encoding (UTF-8). (gcovr --source-encoding)
     :source_encoding: <source_encoding>
 
-    # Report the branch coverage instead of the line coverage. For text report only. (gcovr --branches).
+    # Report the branch coverage instead of the line coverage. For text report only. (gcovr --sort-branches).
     :branches: [true|false]
 
     # Sort entries by increasing number of uncovered lines.
@@ -294,7 +294,7 @@ default behaviors of gcovr:
     :sort_uncovered: [true|false]
 
     # Sort entries by increasing percentage of uncovered lines.
-    # For text and HTML report. (gcovr --sort-percentage)
+    # For text and HTML report. (gcovr --sort uncovered-percent)
     :sort_percentage: [true|false]
 
     # Print a small report to stdout with line & branch percentage coverage.
