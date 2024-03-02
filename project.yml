@@ -19,8 +19,9 @@
   :load_paths:
     - vendor/ceedling/plugins
   :enabled:
-    - stdout_pretty_tests_report
     - gcov
+    - stdout_pretty_tests_report
+    - warnings_report
 
 :project:
   :build_root: build
