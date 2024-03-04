@@ -18,7 +18,7 @@ void tearDown(void)
 }
 
 /****************************************************************************************************
- * Test
+ * Test (Public)
  ****************************************************************************************************/
 
 /*** Get Comma Separated Value List ***/
@@ -54,10 +54,10 @@ void test_getCommaSeparatedValueList_success(void)
         const char * const Input;
         const char *ExpectedList[MAX_LIST_COUNT];
         const uint8_t ExpectedListCount;
-    } cliHelperTest_testData_t;
+    } testData_t;
 
     /* Test Data */
-    const cliHelperTest_testData_t TestData[] =
+    const testData_t TestData[] =
     {
         {"0", {"0", NULL, NULL}, 1},
         {"0a,1b", {"0a", "1b", NULL}, 2},

@@ -1,10 +1,14 @@
+:defines:
+  :test:
+    - CEEDLING
+
 :extension:
   :executable: .exe
 
 :gcov:
   :gcovr:
-    :html_medium_threshold: 75
-    :html_high_threshold: 90
+    :html_medium_threshold: 50
+    :html_high_threshold: 100
   :html_report_type: detailed
   :utilities:
     - gcovr
@@ -20,6 +24,7 @@
     - vendor/ceedling/plugins
   :enabled:
     - gcov
+    - junit_tests_report
     - stdout_pretty_tests_report
     - warnings_report
 
