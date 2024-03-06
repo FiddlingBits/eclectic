@@ -25,61 +25,61 @@ extern cli_printfCallback_t cli_printfCallback;
 extern cli_record_t *cli_recordList;
 
 /*** Local ***/
-static bool testCli_alertProcessInput;
-static uint8_t testCli_commandHandlerCallbackArgc;
-static char *testCli_commandHandlerCallbackArgv[CLI_CONFIG_MAXIMUM_ARGUMENT_LIST_COUNT];
-static bool testCli_commandHandlerCallbackHelpCommand;
-static char testCli_printfCallbackString[TEST_CLI_PRINTF_CALLBACK_STRING_LENGTH];
-static size_t testCli_printfCallbackStringIndex;
+static bool cliHelper_alertProcessInput;
+static uint8_t cliHelper_commandHandlerCallbackArgc;
+static char *cliHelper_commandHandlerCallbackArgv[CLI_CONFIG_MAXIMUM_ARGUMENT_LIST_COUNT];
+static bool cliHelper_commandHandlerCallbackHelpCommand;
+static char cliHelper_printfCallbackString[TEST_CLI_PRINTF_CALLBACK_STRING_LENGTH];
+static size_t cliHelper_printfCallbackStringIndex;
 
 /****************************************************************************************************
  * Helper
  ****************************************************************************************************/
 
 /*** Alert Process Input Callback ***/
-static void testCli_alertProcessInputCallback(void)
+static void cliHelper_alertProcessInputCallback(void)
 {
-    testCli_alertProcessInput = true;
+    cliHelper_alertProcessInput = true;
 }
 
 /*** Command Handler Callback ***/
-static void testCli_commandHandlerCallback(uint8_t argc, char *argv[])
+static void cliHelper_commandHandlerCallback(uint8_t argc, char *argv[])
 {
     uint8_t i;
     
     /*** Process Arguments ***/
     if((argc == 1) && (strcmp(argv[0], "--help") == 0))
     {
-        testCli_commandHandlerCallbackHelpCommand = true;
+        cliHelper_commandHandlerCallbackHelpCommand = true;
     }
     else
     {
-        testCli_commandHandlerCallbackArgc = argc;
+        cliHelper_commandHandlerCallbackArgc = argc;
         for(i = 0; i < CLI_CONFIG_MAXIMUM_ARGUMENT_LIST_COUNT; i++)
         {
             if(i < argc)
-                testCli_commandHandlerCallbackArgv[i] = argv[i];
+                cliHelper_commandHandlerCallbackArgv[i] = argv[i];
             else
-                testCli_commandHandlerCallbackArgv[i] = NULL;
+                cliHelper_commandHandlerCallbackArgv[i] = NULL;
         }
-        testCli_commandHandlerCallbackHelpCommand = false;
+        cliHelper_commandHandlerCallbackHelpCommand = false;
     }
 }
 
 /*** Print Formatted String Callback ***/
-static void testCli_printfCallback(const bool Flush, const char * const Format, ...)
+static void cliHelper_printfCallback(const bool Flush, const char * const Format, ...)
 {
     va_list arguments;
 
     /*** Print Formatted String Callback ***/
     /* Decode Format String And Optional Arguments And Write To Print String */
     va_start(arguments, Format);
-    testCli_printfCallbackStringIndex += (size_t)vsnprintf(&testCli_printfCallbackString[testCli_printfCallbackStringIndex], sizeof(testCli_printfCallbackString) - testCli_printfCallbackStringIndex, Format, arguments);
+    cliHelper_printfCallbackStringIndex += (size_t)vsnprintf(&cliHelper_printfCallbackString[cliHelper_printfCallbackStringIndex], sizeof(cliHelper_printfCallbackString) - cliHelper_printfCallbackStringIndex, Format, arguments);
     va_end(arguments);
     
     /* Print String */
     if(Flush)
-        testCli_printfCallbackStringIndex = 0;
+        cliHelper_printfCallbackStringIndex = 0;
 }
 
 /****************************************************************************************************
@@ -99,9 +99,9 @@ extern eclectic_status_t cli_verifyRecordNameAcceptable(const char * const Name)
 
 void setUp(void)
 {
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_init(testCli_alertProcessInputCallback, testCli_printfCallback, "$ "));
-    testCli_alertProcessInput = false;
-    testCli_printfCallbackStringIndex = 0;
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_init(cliHelper_alertProcessInputCallback, cliHelper_printfCallback, "$ "));
+    cliHelper_alertProcessInput = false;
+    cliHelper_printfCallbackStringIndex = 0;
 }
 
 void tearDown(void)
@@ -157,20 +157,20 @@ void test_addInputCharacter_success(void)
     {   
         /* Set Up */
         cli_inputBufferIndex = 0;
-        testCli_alertProcessInput = false;
+        cliHelper_alertProcessInput = false;
         
         /* Add Input Character (All But Last) */
         for(j = 0; j < (strlen(TestData[i].Input) - 1); j++)
         {
             TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_addInputCharacter(TestData[i].Input[j]));
-            TEST_ASSERT_FALSE(testCli_alertProcessInput);
+            TEST_ASSERT_FALSE(cliHelper_alertProcessInput);
         }
         
         /* Add Input Character (Last) */
         TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_addInputCharacter(TestData[i].Input[j]));
         
         /* Alert Process Input */
-        TEST_ASSERT_TRUE(testCli_alertProcessInput);
+        TEST_ASSERT_TRUE(cliHelper_alertProcessInput);
         TEST_ASSERT_EQUAL_STRING(TestData[i].ExpectedOutput, cli_inputBuffer);
         TEST_ASSERT_EQUAL_INT(strlen(TestData[i].ExpectedOutput) + 1, cli_inputBufferIndex); // Newline Character Is Converted To NUL Character And Counted In cli_inputBufferIndex
     }
@@ -181,9 +181,9 @@ void test_init_error(void)
 {
     /*** Initialize ***/
     /* NULL Pointer */
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cli_init(NULL, testCli_printfCallback, "$ "));
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cli_init(testCli_alertProcessInputCallback, NULL, "$ "));
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cli_init(testCli_alertProcessInputCallback, testCli_printfCallback, NULL));
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cli_init(NULL, cliHelper_printfCallback, "$ "));
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cli_init(cliHelper_alertProcessInputCallback, NULL, "$ "));
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cli_init(cliHelper_alertProcessInputCallback, cliHelper_printfCallback, NULL));
 }
 
 void test_init_success(void)
@@ -194,11 +194,11 @@ void test_init_success(void)
     
     /*** Initialize ***/
     /* Variable */
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_init(testCli_alertProcessInputCallback, testCli_printfCallback, "$ "));
-    TEST_ASSERT_EQUAL_PTR(testCli_alertProcessInputCallback, cli_alertProcessInputCallback);
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_init(cliHelper_alertProcessInputCallback, cliHelper_printfCallback, "$ "));
+    TEST_ASSERT_EQUAL_PTR(cliHelper_alertProcessInputCallback, cli_alertProcessInputCallback);
     TEST_ASSERT_EQUAL_STRING("$ ", cli_commandPrompt);
     TEST_ASSERT_EQUAL_UINT16(0, cli_inputBufferIndex);
-    TEST_ASSERT_EQUAL_PTR(testCli_printfCallback, cli_printfCallback);
+    TEST_ASSERT_EQUAL_PTR(cliHelper_printfCallback, cli_printfCallback);
     
     /* Built-In Command */
     record = cli_recordList;
@@ -207,8 +207,8 @@ void test_init_success(void)
     TEST_ASSERT_EQUAL_STRING(CLI_CONFIG_BUILT_IN_COMMAND_LIST_NAME, record->name);
     
     /* Serial Output */
-    TEST_ASSERT_EQUAL_STRING("$ ", testCli_printfCallbackString);
-    TEST_ASSERT_EQUAL_INT(0, testCli_printfCallbackStringIndex); // Flushed
+    TEST_ASSERT_EQUAL_STRING("$ ", cliHelper_printfCallbackString);
+    TEST_ASSERT_EQUAL_INT(0, cliHelper_printfCallbackStringIndex); // Flushed
 }
 
 /*** Process Input ***/
@@ -257,27 +257,27 @@ void test_processInput_success(void)
     cli_record_t record;
     
     /* Set Up */
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_registerCommand(&record, "test", &testCli_commandHandlerCallback));
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_registerCommand(&record, "test", &cliHelper_commandHandlerCallback));
     
     /*** Process Input ***/
     for(i = 0; i < TestDataCount; i++)
     {   
         /* Set Up */
-        testCli_alertProcessInput = false;
-        testCli_commandHandlerCallbackArgc = 0;
+        cliHelper_alertProcessInput = false;
+        cliHelper_commandHandlerCallbackArgc = 0;
         for(j = 0; j < CLI_CONFIG_MAXIMUM_ARGUMENT_LIST_COUNT; j++)
-            testCli_commandHandlerCallbackArgv[j] = NULL;
+            cliHelper_commandHandlerCallbackArgv[j] = NULL;
         
         /* Add Input Character */
         for(j = 0; j < strlen(TestData[i].Input); j++)
             TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_addInputCharacter(TestData[i].Input[j]));
-        TEST_ASSERT_TRUE(testCli_alertProcessInput);
+        TEST_ASSERT_TRUE(cliHelper_alertProcessInput);
         
         /* Process Input */
         TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_processInput());
-        TEST_ASSERT_EQUAL_UINT8(TestData[i].ExpectedArgc, testCli_commandHandlerCallbackArgc);
+        TEST_ASSERT_EQUAL_UINT8(TestData[i].ExpectedArgc, cliHelper_commandHandlerCallbackArgc);
         for(j = 0; j < CLI_CONFIG_MAXIMUM_ARGUMENT_LIST_COUNT; j++)
-            TEST_ASSERT_EQUAL_STRING(TestData[i].ExpectedArgv[j], testCli_commandHandlerCallbackArgv[j]);
+            TEST_ASSERT_EQUAL_STRING(TestData[i].ExpectedArgv[j], cliHelper_commandHandlerCallbackArgv[j]);
     }
 }
 
@@ -290,19 +290,19 @@ void test_registerCommand_error(void)
     
     /*** Register Command ***/
     /* NULL Pointer */
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cli_registerCommand(NULL, "name", &testCli_commandHandlerCallback));
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cli_registerCommand(&record[0], NULL, &testCli_commandHandlerCallback));
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cli_registerCommand(NULL, "name", &cliHelper_commandHandlerCallback));
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cli_registerCommand(&record[0], NULL, &cliHelper_commandHandlerCallback));
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cli_registerCommand(&record[0], "name", NULL));
     
     /* Length */
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_LENGTH, cli_registerCommand(&record[0], "", &testCli_commandHandlerCallback));
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_LENGTH, cli_registerCommand(&record[0], "", &cliHelper_commandHandlerCallback));
     
     /* String */
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_STRING, cli_registerCommand(&record[0], "nam3", &testCli_commandHandlerCallback));
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_STRING, cli_registerCommand(&record[0], "nam3", &cliHelper_commandHandlerCallback));
     
     /* Not Unique */
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_registerCommand(&record[0], "name", &testCli_commandHandlerCallback));
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NOT_UNIQUE, cli_registerCommand(&record[1], "name", &testCli_commandHandlerCallback));
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_registerCommand(&record[0], "name", &cliHelper_commandHandlerCallback));
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NOT_UNIQUE, cli_registerCommand(&record[1], "name", &cliHelper_commandHandlerCallback));
 }
 
 void test_registerCommand_success(void)
@@ -336,7 +336,7 @@ void test_registerCommand_success(void)
     /*** Register Command ***/
     /* Register Command */
     for(i = 0; i < REGISTER_COMMAND_COUNT; i++)
-        TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_registerCommand(&recordList[i], TestData.RegisterOrder[i], &testCli_commandHandlerCallback));
+        TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_registerCommand(&recordList[i], TestData.RegisterOrder[i], &cliHelper_commandHandlerCallback));
     
     /* Record List Order */
     record = cli_recordList;
@@ -362,7 +362,7 @@ void test_addRecord_success(void)
     record.name = "test";
     record.prev = NULL;
     record.next = NULL;
-    record.commandHandlerCallback = testCli_commandHandlerCallback;
+    record.commandHandlerCallback = cliHelper_commandHandlerCallback;
     
     /*** Add Record ***/
     cli_addRecord(&record); // Not Necessary To Test As It Doesn't Return Anything; Added For Completeness
@@ -376,7 +376,7 @@ void test_helpCommandHandlerCallback_success(void)
     cli_record_t record;
     
     /* Set Up */
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_registerCommand(&record, "test", &testCli_commandHandlerCallback));
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_registerCommand(&record, "test", &cliHelper_commandHandlerCallback));
     
     /*** Help Command Handler Callback ***/
     /* Help Command Handler Callback */
@@ -393,15 +393,15 @@ void test_listCommandHandlerCallback_success(void)
     cli_record_t record;
     
     /* Set Up */
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_registerCommand(&record, "test", &testCli_commandHandlerCallback));
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cli_registerCommand(&record, "test", &cliHelper_commandHandlerCallback));
     
     /*** List Command Handler Callback ***/
     /* List Command Handler Callback */
     cli_listCommandHandlerCallback(0, NULL); // Arguments Ignored
     
     /* Serial Output */
-    TEST_ASSERT_EQUAL_STRING("test\n", testCli_printfCallbackString);
-    TEST_ASSERT_EQUAL_INT(0, testCli_printfCallbackStringIndex); // Flushed
+    TEST_ASSERT_EQUAL_STRING("test\n", cliHelper_printfCallbackString);
+    TEST_ASSERT_EQUAL_INT(0, cliHelper_printfCallbackStringIndex); // Flushed
 }
 
 /*** Get Command And Argument List ***/
@@ -495,7 +495,7 @@ void test_verifyRecordNameAcceptable_error_postprocess(void)
     
     /*** Verify Record Name Acceptable ***/
     for(i = 0; i < TestDataCount; i++)
-        TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_STRING, cli_registerCommand(&record, TestData[i], testCli_commandHandlerCallback));
+        TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_STRING, cli_registerCommand(&record, TestData[i], cliHelper_commandHandlerCallback));
 }
 
 void test_verifyRecordNameAcceptable_success(void)
@@ -527,5 +527,5 @@ void test_verifyRecordNameAcceptable_success(void)
     
     /*** Verify Record Name Acceptable ***/
     for(i = 0; i < TestDataCount; i++)
-        TEST_ASSERT_EQUAL_INT(TestData[i].ExpectedStatus, cli_registerCommand(&record[i], TestData[i].Name, testCli_commandHandlerCallback));
+        TEST_ASSERT_EQUAL_INT(TestData[i].ExpectedStatus, cli_registerCommand(&record[i], TestData[i].Name, cliHelper_commandHandlerCallback));
 }
