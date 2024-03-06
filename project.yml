@@ -9,7 +9,8 @@
   :gcovr:
     :html_medium_threshold: 50
     :html_high_threshold: 100
-  :html_report_type: detailed
+  :reports:
+    - HtmlDetailed
   :utilities:
     - gcovr
 
