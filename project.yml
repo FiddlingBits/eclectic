@@ -1,3 +1,11 @@
+:cmock:
+  :enforce_strict_ordering: TRUE
+  :mock_prefix: mock_
+  :plugins:
+    - :ignore
+  :treat_externs: :include
+  :when_no_prototypes: :error
+
 :defines:
   :test:
     - CEEDLING

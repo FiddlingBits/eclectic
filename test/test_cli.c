@@ -309,7 +309,6 @@ void test_registerCommand_success(void)
 {
     /*** Test Data ***/
     /* Define */
-    #undef REGISTER_COMMAND_COUNT
     #define REGISTER_COMMAND_COUNT (6)
     
     /* Type Definition */
@@ -345,6 +344,9 @@ void test_registerCommand_success(void)
         TEST_ASSERT_EQUAL_STRING(TestData.ExpectedOrder[i], record->name);
         record = record->next;
     }
+    
+    /*** Clean Up ***/
+    #undef REGISTER_COMMAND_COUNT
 }
 
 /****************************************************************************************************
@@ -502,7 +504,6 @@ void test_verifyRecordNameAcceptable_success(void)
 {
     /*** Test Data ***/
     /* Define */
-    #undef REGISTER_COMMAND_COUNT
     #define REGISTER_COMMAND_COUNT (3)
     
     /* Type Definition */
@@ -528,4 +529,7 @@ void test_verifyRecordNameAcceptable_success(void)
     /*** Verify Record Name Acceptable ***/
     for(i = 0; i < TestDataCount; i++)
         TEST_ASSERT_EQUAL_INT(TestData[i].ExpectedStatus, cli_registerCommand(&record[i], TestData[i].Name, cliHelper_commandHandlerCallback));
+    
+    /*** Clean Up ***/
+    #undef REGISTER_COMMAND_COUNT
 }

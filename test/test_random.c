@@ -73,7 +73,6 @@ void test_getRandomSigned32BitInteger_success(void)
 {
     /*** Test Data ***/
     /* Define */
-    #undef INTEGER_LIST_COUNT
     #define INTEGER_LIST_COUNT (10)
     
     /* Variable */
@@ -94,6 +93,9 @@ void test_getRandomSigned32BitInteger_success(void)
     
     /* Verify */
     TEST_ASSERT_EQUAL_INT32_ARRAY(expectedIntegerList, actualIntegerList, INTEGER_LIST_COUNT);
+    
+    /*** Clean Up ***/
+    #undef INTEGER_LIST_COUNT
 }
 
 /*** Get Random Signed 32-Bit Integer Within Range (Inclusive) ***/
@@ -117,7 +119,6 @@ void test_getRandomSigned32BitIntegerWithinRange_success(void)
 {
     /*** Test Data ***/
     /* Define */
-    #undef INTEGER_LIST_COUNT
     #define INTEGER_LIST_COUNT (10)
     
     /* Variable */
@@ -139,6 +140,9 @@ void test_getRandomSigned32BitIntegerWithinRange_success(void)
     
     /* Verify */
     TEST_ASSERT_EQUAL_UINT32_ARRAY(expectedIntegerList, actualIntegerList, INTEGER_LIST_COUNT);
+    
+    /*** Clean Up ***/
+    #undef INTEGER_LIST_COUNT
 }
 
 /*** Get Random Unsigned 32-Bit Integer ***/
@@ -156,7 +160,6 @@ void test_getRandomUnsigned32BitInteger_success(void)
 {
     /*** Test Data ***/
     /* Define */
-    #undef INTEGER_LIST_COUNT
     #define INTEGER_LIST_COUNT (10)
     
     /* Variable */
@@ -177,6 +180,9 @@ void test_getRandomUnsigned32BitInteger_success(void)
     
     /* Verify */
     TEST_ASSERT_EQUAL_UINT32_ARRAY(expectedIntegerList, actualIntegerList, INTEGER_LIST_COUNT);
+    
+    /*** Clean Up ***/
+    #undef INTEGER_LIST_COUNT
 }
 
 /*** Get Random Unsigned 32-Bit Integer Within Range (Inclusive) ***/
@@ -200,7 +206,6 @@ void test_getRandomUnsigned32BitIntegerWithinRange_success(void)
 {
     /*** Test Data ***/
     /* Define */
-    #undef INTEGER_LIST_COUNT
     #define INTEGER_LIST_COUNT (10)
     
     /* Variable */
@@ -222,6 +227,9 @@ void test_getRandomUnsigned32BitIntegerWithinRange_success(void)
     
     /* Verify */
     TEST_ASSERT_EQUAL_UINT32_ARRAY(expectedIntegerList, actualIntegerList, INTEGER_LIST_COUNT);
+    
+    /*** Clean Up ***/
+    #undef INTEGER_LIST_COUNT
 }
 
 /*** Initialize ***/
@@ -264,11 +272,10 @@ void test_setBuffer_success(void)
 {
     /*** Test Data ***/
     /* Define */
-    #undef BUFFER_COUNT
     #define BUFFER_COUNT (10)
     
     /* Variable */
-    uint8_t actualBuffer[INTEGER_LIST_COUNT], expectedBuffer[INTEGER_LIST_COUNT];
+    uint8_t actualBuffer[BUFFER_COUNT], expectedBuffer[BUFFER_COUNT];
     size_t i;
     const unsigned int Seed = randomHelper_getRandomSeed();
     
@@ -284,4 +291,7 @@ void test_setBuffer_success(void)
     
     /* Verify */
     TEST_ASSERT_EQUAL_UINT8_ARRAY(expectedBuffer, actualBuffer, BUFFER_COUNT);
+    
+    /*** Clean Up ***/
+    #undef BUFFER_COUNT
 }

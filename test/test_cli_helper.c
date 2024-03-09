@@ -40,6 +40,9 @@ void test_getCommaSeparatedValueList_error(void)
 
     /* Length */
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_LENGTH, cliHelper_getCommaSeparatedValueList("", MAX_LIST_COUNT, list, &listCount));
+    
+    /*** Clean Up ***/
+    #undef MAX_LIST_COUNT
 }
 
 void test_getCommaSeparatedValueList_success(void)
@@ -82,6 +85,9 @@ void test_getCommaSeparatedValueList_success(void)
         for(j = 0; j < MAX_LIST_COUNT; j++)
             TEST_ASSERT_EQUAL_STRING(TestData[i].ExpectedList[j], actualList[j]);
     }
+    
+    /*** Clean Up ***/
+    #undef MAX_LIST_COUNT
 }
 
 /*** Get Double ***/
