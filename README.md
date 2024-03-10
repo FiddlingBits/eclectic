@@ -7,5 +7,6 @@ According to Merriam-Webster: Composed Of Elements Drawn From Various Sources
 * CRC (Cyclic Redundancy Check)
 * List
     * Queue
+    * Set
     * Stack
 * Random

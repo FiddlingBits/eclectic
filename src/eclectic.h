@@ -34,6 +34,7 @@ typedef void *(*eclectic_mallocCallback_t)(size_t size);
 typedef enum eclectic_status_e
 {
     ECLECTIC_STATUS_SUCCESS = 0,
+    ECLECTIC_STATUS_ERROR_DUPLICATE,
     ECLECTIC_STATUS_ERROR_INVALID,
     ECLECTIC_STATUS_ERROR_LENGTH,
     ECLECTIC_STATUS_ERROR_MEMORY_ALLOCATION,

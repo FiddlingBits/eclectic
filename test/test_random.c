@@ -1,5 +1,5 @@
 /****************************************************************************************************
- * Type Definition
+ * Include
  ****************************************************************************************************/
 
 #include "random.h"
@@ -124,7 +124,7 @@ void test_getRandomSigned32BitIntegerWithinRange_success(void)
     /* Variable */
     uint32_t actualIntegerList[INTEGER_LIST_COUNT], expectedIntegerList[INTEGER_LIST_COUNT];
     size_t i;
-    const int32_t MinimumInteger = -1073741824, MaximumInteger = 1073741824; // -(2^32 * (1 / 4)) = 1,073,741,824;  2^32 * (1 / 4) = 1,073,741,824
+    const int32_t MinimumInteger = -1073741824, MaximumInteger = 1073741824; // -(2^32 * (1 / 4)) = -1,073,741,824;  2^32 * (1 / 4) = 1,073,741,824
     const unsigned int Seed = randomHelper_getRandomSeed();
     
     /* Set Up */
