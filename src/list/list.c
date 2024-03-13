@@ -38,9 +38,9 @@ eclectic_status_t list_destroy(list_list_t * const list)
 }
 
 /*** Find ***/
-bool list_find(const list_list_t * const List, const void * const Data)
+size_t list_find(const list_list_t * const List, const void * const Data)
 {
-    bool found = false;
+    size_t foundIndex = LIST_FIND_NOT_FOUND_INDEX, i;
     const list_node_t *Node;
     
     /*** Find ***/
@@ -49,12 +49,12 @@ bool list_find(const list_list_t * const List, const void * const Data)
     {
         /* Find */
         Node = List->head;
-        while(Node != NULL)
+        for(i = 0; i < list_size(List); i++)
         {
             /* Compare */
             if(List->compareCallback(Data, Node->data) == 0)
             {
-                found = true;
+                foundIndex = i;
                 break;
             }
             
@@ -63,7 +63,7 @@ bool list_find(const list_list_t * const List, const void * const Data)
         }
     }
     
-    return found;
+    return foundIndex;
 }
 
 /*** Initialize ***/
@@ -140,10 +140,10 @@ void *list_popAt(list_list_t * const list, const size_t Index)
             
             /* Decrement Size */
             list->size--;
+            
+            /* Clean Up */
+            eclectic_free((void **)&Node);
         }
-        
-        /* Clean Up */
-        eclectic_free((void **)&Node);
     }
     
     return data;

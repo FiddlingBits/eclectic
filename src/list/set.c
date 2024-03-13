@@ -26,7 +26,7 @@ eclectic_status_t set_init(set_set_t * const set, const set_compareCallback_t Co
 eclectic_status_t set_insert(set_set_t * const set, void *data)
 {
     /*** Insert ***/
-    if(!list_find(set, data))
+    if(list_find(set, data) == LIST_FIND_NOT_FOUND_INDEX)
         return list_pushSorted(set, data, false);
     else
         return ECLECTIC_STATUS_ERROR_DUPLICATE;

@@ -2,7 +2,7 @@
   :enforce_strict_ordering: TRUE
   :mock_prefix: mock_
   :plugins:
-    - :ignore
+    - :expect_any_args
   :treat_externs: :include
   :when_no_prototypes: :error
 

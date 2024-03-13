@@ -1,4 +1,10 @@
 /****************************************************************************************************
+ * Define
+ ****************************************************************************************************/
+
+#define CLI_HELPER_TEST_LIST_COUNT (3)
+
+/****************************************************************************************************
  * Include
  ****************************************************************************************************/
 
@@ -25,37 +31,28 @@ void tearDown(void)
 void test_getCommaSeparatedValueList_error(void)
 {
     /*** Test Data ***/
-    /* Define */
-    #define MAX_LIST_COUNT (3)
-
     /* Variable */
-    char *list[MAX_LIST_COUNT];
+    char *list[CLI_HELPER_TEST_LIST_COUNT];
     uint8_t listCount;
 
     /*** Get Comma Separated Value List ***/
-    /* NULL Pointer */
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getCommaSeparatedValueList(NULL, MAX_LIST_COUNT, list, &listCount));
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getCommaSeparatedValueList("0,1,2", MAX_LIST_COUNT, NULL, &listCount));
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getCommaSeparatedValueList("0,1,2", MAX_LIST_COUNT, list, NULL));
+    /* Get Comma Separated Value List (NULL Pointer Error) */
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getCommaSeparatedValueList(NULL, CLI_HELPER_TEST_LIST_COUNT, list, &listCount));
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getCommaSeparatedValueList("0,1,2", CLI_HELPER_TEST_LIST_COUNT, NULL, &listCount));
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getCommaSeparatedValueList("0,1,2", CLI_HELPER_TEST_LIST_COUNT, list, NULL));
 
-    /* Length */
-    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_LENGTH, cliHelper_getCommaSeparatedValueList("", MAX_LIST_COUNT, list, &listCount));
-    
-    /*** Clean Up ***/
-    #undef MAX_LIST_COUNT
+    /* Get Comma Separated Value List (Length Error) */
+    TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_LENGTH, cliHelper_getCommaSeparatedValueList("", CLI_HELPER_TEST_LIST_COUNT, list, &listCount));
 }
 
 void test_getCommaSeparatedValueList_success(void)
 {
     /*** Test Data ***/
-    /* Define */
-    #define MAX_LIST_COUNT (3)
-
     /* Type Definition */
     typedef struct testData_s
     {
         const char * const Input;
-        const char *ExpectedList[MAX_LIST_COUNT];
+        const char *ExpectedList[CLI_HELPER_TEST_LIST_COUNT];
         const uint8_t ExpectedListCount;
     } testData_t;
 
@@ -70,7 +67,7 @@ void test_getCommaSeparatedValueList_success(void)
     const size_t TestDataCount = sizeof(TestData) / sizeof(TestData[0]);
 
     /* Variable */
-    char *actualList[MAX_LIST_COUNT], input[64];
+    char *actualList[CLI_HELPER_TEST_LIST_COUNT], input[64];
     uint8_t i, j, actualListCount;
 
     /*** Get Comma Separated Value List ***/
@@ -80,14 +77,11 @@ void test_getCommaSeparatedValueList_success(void)
         strcpy(input, TestData[i].Input);
 
         /* Get Comma Separated Value List */
-        TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cliHelper_getCommaSeparatedValueList(input, MAX_LIST_COUNT, actualList, &actualListCount));
+        TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, cliHelper_getCommaSeparatedValueList(input, CLI_HELPER_TEST_LIST_COUNT, actualList, &actualListCount));
         TEST_ASSERT_EQUAL_UINT8(TestData[i].ExpectedListCount, actualListCount);
-        for(j = 0; j < MAX_LIST_COUNT; j++)
+        for(j = 0; j < CLI_HELPER_TEST_LIST_COUNT; j++)
             TEST_ASSERT_EQUAL_STRING(TestData[i].ExpectedList[j], actualList[j]);
     }
-    
-    /*** Clean Up ***/
-    #undef MAX_LIST_COUNT
 }
 
 /*** Get Double ***/
@@ -98,11 +92,11 @@ void test_getDouble_error_preconversion(void)
     double d;
 
     /*** Get Double ***/
-    /* NULL Pointer */
+    /* Get Double (NULL Pointer Error) */
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getDouble(NULL, &d));
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getDouble("3.14", NULL));
 
-    /* Length */
+    /* Get Double (Length Error) */
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_LENGTH, cliHelper_getDouble("", &d));
 }
 
@@ -184,11 +178,11 @@ void test_getFloat_error_preconversion(void)
     float f;
 
     /*** Get Float ***/
-    /* NULL Pointer */
+    /* Get Float (NULL Pointer Error) */
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getFloat(NULL, &f));
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getFloat("3.14", NULL));
 
-    /* Length */
+    /* Get Float (Length Error) */
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_LENGTH, cliHelper_getFloat("", &f));
 }
 
@@ -270,11 +264,11 @@ void test_getOptionArgumentPair_error_preconversion(void)
     cliHelper_optionArgumentPair_t optionArgumentPair;
     
     /*** Get Option/Argument Pair ***/
-    /* NULL Pointer */
+    /* Get Option/Argument Pair (NULL Pointer Error) */
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getOptionArgumentPair(NULL, &optionArgumentPair));
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getOptionArgumentPair("--help", NULL));
     
-    /* Length */
+    /* Get Option/Argument Pair (Length Error) */
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_LENGTH, cliHelper_getOptionArgumentPair("", &optionArgumentPair));
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_LENGTH, cliHelper_getOptionArgumentPair("-", &optionArgumentPair));
 }
@@ -375,11 +369,11 @@ void test_getSigned32BitInteger_error_preconversion(void)
     int32_t s32;
     
     /*** Get Signed 32-Bit Integer ***/
-    /* NULL Pointer */
+    /* Get Signed 32-Bit Integer (NULL Pointer Error) */
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getSigned32BitInteger(NULL, &s32));
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getSigned32BitInteger("0", NULL));
     
-    /* Length */
+    /* Get Signed 32-Bit Integer (Length Error) */
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_LENGTH, cliHelper_getSigned32BitInteger("", &s32));
 }
 
@@ -465,11 +459,11 @@ void test_getUnsigned32BitInteger_error_preconversion(void)
     uint32_t u32;
     
     /*** Get Unsigned 32-Bit Integer ***/
-    /* NULL Pointer */
+    /* Get Unsigned 32-Bit Integer (NULL Pointer Error) */
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getUnsigned32BitInteger(NULL, &u32));
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_NULL_POINTER, cliHelper_getUnsigned32BitInteger("0", NULL));
     
-    /* Length */
+    /* Get Unsigned 32-Bit Integer (Length Error) */
     TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_ERROR_LENGTH, cliHelper_getUnsigned32BitInteger("", &u32));
 }
 

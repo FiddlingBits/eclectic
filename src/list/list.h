@@ -5,10 +5,17 @@
 #pragma once
 
 /****************************************************************************************************
+ * Define
+ ****************************************************************************************************/
+
+#define LIST_FIND_NOT_FOUND_INDEX (UINT_MAX)
+
+/****************************************************************************************************
  * Include
  ****************************************************************************************************/
 
 #include "eclectic.h"
+#include <limits.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -41,7 +48,7 @@ typedef struct list_list_s
  ****************************************************************************************************/
 
 extern eclectic_status_t list_destroy(list_list_t * const list);
-extern bool list_find(const list_list_t * const List, const void * const Data);
+extern size_t list_find(const list_list_t * const List, const void * const Data);
 extern eclectic_status_t list_init(list_list_t * const list, const list_compareCallback_t CompareCallback, const list_destroyCallback_t DestroyCallback);
 extern void *list_peekAt(const list_list_t * const List, const size_t Index);
 extern void *list_popAt(list_list_t * const list, const size_t Index);

@@ -1,4 +1,10 @@
 /****************************************************************************************************
+ * Define
+ ****************************************************************************************************/
+
+#define LIST_DERIVED_TEST_LIST_COUNT (10)
+
+/****************************************************************************************************
  * Include
  ****************************************************************************************************/
 
@@ -16,7 +22,7 @@
  ****************************************************************************************************/
 
 /*** Compare Callback ***/
-int listDerivedHelper_compareCallback(const void * const Data1, const void * const Data2)
+int listDerivedTest_compareCallback(const void * const Data1, const void * const Data2)
 {    
     /*** Compare Callback ***/
     return *(const int *)Data1 - *(const int *)Data2;
@@ -60,8 +66,7 @@ void test_compareCallback_success(void)
     /*** Compare Callback ***/
     for(i = 0; i < TestDataCount; i++)
     {
-        /* Compare Callback */
-        actualResult = listDerivedHelper_compareCallback(&TestData[i].Integer1, &TestData[i].Integer2);
+        actualResult = listDerivedTest_compareCallback(&TestData[i].Integer1, &TestData[i].Integer2);
         TEST_ASSERT_EQUAL_INT(TestData[i].ExpectedResult, actualResult);
     }
 }
@@ -87,14 +92,11 @@ void tearDown(void)
 void test_queue(void)
 {
     /*** Test Data ***/
-    /* Define */
-    #define MAX_LIST_COUNT (5)
-
     /* Type Definition */
     typedef struct testData_s
     {
-        const int EnqueueIntegerList[MAX_LIST_COUNT];
-        const int ExpectedIntegerList[MAX_LIST_COUNT];
+        const int EnqueueIntegerList[LIST_DERIVED_TEST_LIST_COUNT];
+        const int ExpectedIntegerList[LIST_DERIVED_TEST_LIST_COUNT];
     } testData_t;
 
     /* Test Data */
@@ -102,30 +104,30 @@ void test_queue(void)
     {
         /* Same Value */
         {
-            {-85, -85, -85, -85, -85},
-            {-85, -85, -85, -85, -85}
+            {-85, -85, -85, -85, -85, -85, -85, -85, -85, -85},
+            {-85, -85, -85, -85, -85, -85, -85, -85, -85, -85}
         },
         {
-            {0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0}
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         },
         {
-            {64, 64, 64, 64, 64},
-            {64, 64, 64, 64, 64}
+            {64, 64, 64, 64, 64, 64, 64, 64, 64, 64},
+            {64, 64, 64, 64, 64, 64, 64, 64, 64, 64}
         },
 
         /* Different Values */
         {
-            {-24, -63, -59, -64, -85},
-            {-24, -63, -59, -64, -85}
+            {-82, -78, -11, -43, -79, -95, -50, -72, -98, -6},
+            {-82, -78, -11, -43, -79, -95, -50, -72, -98, -6}
         },
         {
-            {24, 63, -59, 64, -85},
-            {24, 63, -59, 64, -85}
+            {-82, 78, -11, 43, -79, 95, -50, 72, -98, 6},
+            {-82, 78, -11, 43, -79, 95, -50, 72, -98, 6}
         },
         {
-            {24, 63, 59, 64, 85},
-            {24, 63, 59, 64, 85}
+            {82, 78, 11, 43, 79, 95, 50, 72, 98, 6},
+            {82, 78, 11, 43, 79, 95, 50, 72, 98, 6}
         }
     };
     const size_t TestDataCount = sizeof(TestData) / sizeof(TestData[0]);
@@ -142,7 +144,7 @@ void test_queue(void)
         TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, queue_init(&queue, free));
 
         /* Enqueue */
-        for(j = 0; j < MAX_LIST_COUNT; j++)
+        for(j = 0; j < LIST_DERIVED_TEST_LIST_COUNT; j++)
         {
             data = malloc(sizeof(*data));
             *data = TestData[i].EnqueueIntegerList[j];
@@ -155,7 +157,7 @@ void test_queue(void)
         TEST_ASSERT_EQUAL_UINT(0, queue_size(&queue));
 
         /* Enqueue */
-        for(j = 0; j < MAX_LIST_COUNT; j++)
+        for(j = 0; j < LIST_DERIVED_TEST_LIST_COUNT; j++)
         {
             data = malloc(sizeof(*data));
             *data = TestData[i].EnqueueIntegerList[j];
@@ -164,33 +166,27 @@ void test_queue(void)
         }
 
         /* Dequeue */
-        for(j = 0; j < MAX_LIST_COUNT; j++)
+        for(j = 0; j < LIST_DERIVED_TEST_LIST_COUNT; j++)
         {
             data = queue_dequeue(&queue);
             TEST_ASSERT_EQUAL_INT(TestData[i].ExpectedIntegerList[j], *data);
         }
 
-        /* Clean Up */
+        /* Destroy */
         TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, queue_destroy(&queue));
     }
-
-    /*** Clean Up ***/
-    #undef MAX_LIST_COUNT
 }
 
 /*** Set ***/
 void test_set(void)
 {
     /*** Test Data ***/
-    /* Define */
-    #define MAX_LIST_COUNT (10)
-
     /* Type Definition */
     typedef struct testData_s
     {
-        const int InsertIntegerList[MAX_LIST_COUNT];
-        const eclectic_status_t ExpectedState[MAX_LIST_COUNT];
-        const int ExpectedIntegerList[MAX_LIST_COUNT];
+        const int InsertIntegerList[LIST_DERIVED_TEST_LIST_COUNT];
+        const eclectic_status_t ExpectedState[LIST_DERIVED_TEST_LIST_COUNT];
+        const int ExpectedIntegerList[LIST_DERIVED_TEST_LIST_COUNT];
         const size_t ExpectedIntegerListCount;
     } testData_t;
 
@@ -198,7 +194,7 @@ void test_set(void)
     const testData_t TestData[] =
     {
         {
-            {-24, -50, 49, 14, -18, -48, 40, 21, 36, -34},
+            {-82, 78, -11, 43, -79, 95, -50, 72, -98, 6},
             {
                 ECLECTIC_STATUS_SUCCESS,
                 ECLECTIC_STATUS_SUCCESS,
@@ -211,11 +207,11 @@ void test_set(void)
                 ECLECTIC_STATUS_SUCCESS,
                 ECLECTIC_STATUS_SUCCESS
             },
-            {-50, -48, -34, -24, -18, 14, 21, 36, 40, 49},
+            {-98, -82, -79, -50, -11, 6, 43, 72, 78, 95},
             10
         },
         {
-            {-24, -50, 49, 14, -18, -48, 49, 21, 36, -34},
+            {-82, 78, -11, 43, -79, 95, -50, 78, -98, 6},
             {
                 ECLECTIC_STATUS_SUCCESS,
                 ECLECTIC_STATUS_SUCCESS,
@@ -223,16 +219,16 @@ void test_set(void)
                 ECLECTIC_STATUS_SUCCESS,
                 ECLECTIC_STATUS_SUCCESS,
                 ECLECTIC_STATUS_SUCCESS,
-                ECLECTIC_STATUS_ERROR_DUPLICATE,
                 ECLECTIC_STATUS_SUCCESS,
+                ECLECTIC_STATUS_ERROR_DUPLICATE,
                 ECLECTIC_STATUS_SUCCESS,
                 ECLECTIC_STATUS_SUCCESS
             },
-            {-50, -48, -34, -24, -18, 14, 21, 36, 49, INT_MIN},
+            {-98, -82, -79, -50, -11, 6, 43, 78, 95, INT_MIN},
             9
         },
         {
-            {-24, 49, 49, -24, -24, -24, 49, -24, 49, -24},
+            {-82, 78, 78, 78, -82, -82, 78, -82, 78, 78},
             {
                 ECLECTIC_STATUS_SUCCESS,
                 ECLECTIC_STATUS_SUCCESS,
@@ -245,11 +241,11 @@ void test_set(void)
                 ECLECTIC_STATUS_ERROR_DUPLICATE,
                 ECLECTIC_STATUS_ERROR_DUPLICATE
             },
-            {-24, 49, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN},
+            {-82, 78, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN},
             2
         },
         {
-            {-24, -24, -24, -24, -24, -24, -24, -24, -24, -24},
+            {-82, -82, -82, -82, -82, -82, -82, -82, -82, -82},
             {
                 ECLECTIC_STATUS_SUCCESS,
                 ECLECTIC_STATUS_ERROR_DUPLICATE,
@@ -262,7 +258,7 @@ void test_set(void)
                 ECLECTIC_STATUS_ERROR_DUPLICATE,
                 ECLECTIC_STATUS_ERROR_DUPLICATE
             },
-            {-24, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN},
+            {-82, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN},
             1
         }
     };
@@ -278,10 +274,10 @@ void test_set(void)
    for(i = 0; i < TestDataCount; i++)
     {
         /* Initialize */
-        TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, set_init(&set, listDerivedHelper_compareCallback, free));
+        TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, set_init(&set, listDerivedTest_compareCallback, free));
 
         /* Insert */
-        for(j = 0; j < MAX_LIST_COUNT; j++)
+        for(j = 0; j < LIST_DERIVED_TEST_LIST_COUNT; j++)
         {
             data = malloc(sizeof(*data));
             *data = TestData[i].InsertIntegerList[j];
@@ -294,7 +290,7 @@ void test_set(void)
         TEST_ASSERT_EQUAL_UINT(0, set_size(&set));
 
         /* Insert */
-        for(j = 0; j < MAX_LIST_COUNT; j++)
+        for(j = 0; j < LIST_DERIVED_TEST_LIST_COUNT; j++)
         {
             data = malloc(sizeof(*data));
             *data = TestData[i].InsertIntegerList[j];
@@ -317,26 +313,20 @@ void test_set(void)
             TEST_ASSERT_EQUAL_UINT(--expectedSize, set_size(&set));
         }
 
-        /* Clean Up */
+        /* Destroy */
         TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, set_destroy(&set));
     }
-   
-   /*** Clean Up ***/
-    #undef MAX_LIST_COUNT
 }
 
 /*** Stack ***/
 void test_stack(void)
 {
-   /*** Test Data ***/
-    /* Define */
-    #define MAX_LIST_COUNT (5)
-
+    /*** Test Data ***/
     /* Type Definition */
     typedef struct testData_s
     {
-        const int PushIntegerList[MAX_LIST_COUNT];
-        const int ExpectedIntegerList[MAX_LIST_COUNT];
+        const int PushIntegerList[LIST_DERIVED_TEST_LIST_COUNT];
+        const int ExpectedIntegerList[LIST_DERIVED_TEST_LIST_COUNT];
     } testData_t;
 
     /* Test Data */
@@ -344,30 +334,30 @@ void test_stack(void)
     {
         /* Same Value */
         {
-            {-85, -85, -85, -85, -85},
-            {-85, -85, -85, -85, -85}
+            {-85, -85, -85, -85, -85, -85, -85, -85, -85, -85},
+            {-85, -85, -85, -85, -85, -85, -85, -85, -85, -85}
         },
         {
-            {0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0}
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         },
         {
-            {64, 64, 64, 64, 64},
-            {64, 64, 64, 64, 64}
+            {64, 64, 64, 64, 64, 64, 64, 64, 64, 64},
+            {64, 64, 64, 64, 64, 64, 64, 64, 64, 64}
         },
 
         /* Different Values */
         {
-            {-24, -63, -59, -64, -85},
-            {-85, -64, -59, -63, -24}
+            {-82, -78, -11, -43, -79, -95, -50, -72, -98, -6},
+            {-6, -98, -72, -50, -95, -79, -43, -11, -78, -82}
         },
         {
-            {24, 63, -59, 64, -85},
-            {-85, 64, -59, 63, 24}
+            {-82, 78, -11, 43, -79, 95, -50, 72, -98, 6},
+            {6, -98, 72, -50, 95, -79, 43, -11, 78, -82}
         },
         {
-            {24, 63, 59, 64, 85},
-            {85, 64, 59, 63, 24}
+            {82, 78, 11, 43, 79, 95, 50, 72, 98, 6},
+            {6, 98, 72, 50, 95, 79, 43, 11, 78, 82}
         }
     };
     const size_t TestDataCount = sizeof(TestData) / sizeof(TestData[0]);
@@ -384,7 +374,7 @@ void test_stack(void)
         TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, stack_init(&stack, free));
 
         /* Push */
-        for(j = 0; j < MAX_LIST_COUNT; j++)
+        for(j = 0; j < LIST_DERIVED_TEST_LIST_COUNT; j++)
         {
             data = malloc(sizeof(*data));
             *data = TestData[i].PushIntegerList[j];
@@ -397,7 +387,7 @@ void test_stack(void)
         TEST_ASSERT_EQUAL_UINT(0, stack_size(&stack));
 
         /* Push */
-        for(j = 0; j < MAX_LIST_COUNT; j++)
+        for(j = 0; j < LIST_DERIVED_TEST_LIST_COUNT; j++)
         {
             data = malloc(sizeof(*data));
             *data = TestData[i].PushIntegerList[j];
@@ -406,16 +396,13 @@ void test_stack(void)
         }
 
         /* Pop */
-        for(j = 0; j < MAX_LIST_COUNT; j++)
+        for(j = 0; j < LIST_DERIVED_TEST_LIST_COUNT; j++)
         {
             data = stack_pop(&stack);
             TEST_ASSERT_EQUAL_INT(TestData[i].ExpectedIntegerList[j], *data);
         }
 
-        /* Clean Up */
+        /* Destroy */
         TEST_ASSERT_EQUAL_INT(ECLECTIC_STATUS_SUCCESS, stack_destroy(&stack));
     }
-
-    /*** Clean Up ***/
-    #undef MAX_LIST_COUNT
 }
